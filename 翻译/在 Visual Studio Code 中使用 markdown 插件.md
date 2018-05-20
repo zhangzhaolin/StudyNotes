@@ -5,7 +5,7 @@
 [![AppVeyor](https://img.shields.io/appveyor/ci/neilsustc/vscode-markdown.svg?style=flat-square&label=appveyor%20build)](https://ci.appveyor.com/project/neilsustc/vscode-markdown)  
 [![GitHub stars](https://img.shields.io/github/stars/neilsustc/vscode-markdown.svg?style=flat-square&label=github%20stars)](https://github.com/neilsustc/vscode-markdown)
 
-及您所需 (快捷键, table of contents,自动预览和更多功能).
+及您所需 (快捷键, 目录,自动预览和更多功能).
 
 ## 实现
 
