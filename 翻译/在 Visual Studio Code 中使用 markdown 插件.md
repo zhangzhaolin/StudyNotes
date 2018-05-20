@@ -35,33 +35,33 @@
 
 <!-- ![shortcuts1](images/gifs/bold-normal.gif) -->
 
-![shortcuts2](images/gifs/bold-quick.gif)
+![shortcuts2](https://github.com/neilsustc/vscode-markdown/blob/master/images/gifs/bold-quick.gif)
 
-![shortcuts3](images/gifs/heading.gif)
+![shortcuts3](https://github.com/neilsustc/vscode-markdown/blob/master/images/gifs/heading.gif)
 
 ### 目录
 
-![toc](images/gifs/toc.gif)
+![toc](https://github.com/neilsustc/vscode-markdown/blob/master/images/gifs/toc.gif)
 
 ### 列表
 
-![list editing](images/gifs/list-editing.gif)
+![list editing](https://github.com/neilsustc/vscode-markdown/blob/master/images/gifs/list-editing.gif)
 
 ### 表格格式化
 
-![table formatter](images/gifs/table-formatter.gif)
+![table formatter](https://github.com/neilsustc/vscode-markdown/blob/master/images/gifs/table-formatter.gif)
 
 ### 大纲
 
-![outline](images/outline.png)
+![outline](https://github.com/neilsustc/vscode-markdown/blob/master/images/outline.png)
 
 ### 任务列表
 
-![task lists](images/gifs/tasklists.gif)
+![task lists](https://github.com/neilsustc/vscode-markdown/blob/master/images/gifs/tasklists.gif)
 
 ### 数学渲染
 
-![math rendering](images/math.png)
+![math rendering](https://github.com/neilsustc/vscode-markdown/blob/master/images/math.png)
 
 ## 快捷键
 
