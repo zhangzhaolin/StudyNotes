@@ -111,35 +111,52 @@ a = a ^ b; // a = ( b ^ a ) ^ a = b
 以上都说的是int类型下的移位操作，如果左边操作数为char、byte、short类型都会被转换成int类型处理，当左操作数是long的时候，右边操作数的最大限制变成了64。
 
 
-## 2. HashMap中的哈希算法和哈希表
-汗颜～大学的时候就老师就讲了些HashMap的一些常用用法就草草收尾，数据结构什么的早就忘得一干二净，现在才知道这些东西的重要性啊～
+## 2. HashMap
 
-首先，我觉得看HashMap之前一定要知道的就是**哈希算法**以及**哈希表**了，至于为啥要说是HashMap中的哈希算法...因为哈希算法好像蛮多的，HashMap中的只是众多哈希算法中的其中之一罢了，所以这只是哈希算法的“冰山一角”。
+### 2.1 从HashMap结构说起
 
-先看一下HashMap的hash()函数？
+HashMap结构如下图所示: 
 
-![HashMap的hash函数](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-15/40898679.jpg)
+![HashMap结构](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-17/75072668.jpg)
 
+总的来说，HashMap的结构是：数组+链表+红黑树 （PS : 我用的是10版本的）
 
-说实话……现在看这些英文字母还有那右移符号就有一种劝退即视感，就像玩黑魂第一个劝退boss一样。但是，为了自己的工资，还是硬着头皮往下看吧……和BOSS战一样，慢慢的耗掉“血量”，也就是一句一句的来分析。
+![HashMap中链表的节点](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-17/68941977.jpg)
 
-```
-Computes key.hashCode() and spreads (XORs) higher bits of hash
-to lower.
-计算key.hashCode()和hash值高位移位后的异或值
-```
+![节点组成的数组](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-17/67744525.jpg)
 
-这一句话就是在说计算
+![红黑二叉树](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-17/1457116.jpg)
 
-```
-key.hashCode() ^ (key.hashCode() >>> 16)
-```
+目前，现将红黑二叉树看成是一个不一般的二叉树吧（我能说现阶段不知道什么是红黑二叉树嘛XD）。以上三张图分别就是组成HashMap的三种数据结构了。table就是的数组（这个数组用来存放链表以及红黑树的第一个元素的地址），我们将数组中的各个元素叫做HashMap的桶，称
 
-下一句 : 
+然后，再来看一下几个HashMap中几个重要的字段 : 
 
 ```
-Because the table uses power-of-two masking, sets of hashes that vary only in bits above the current mask will always collide.
-因为table用了二次幂，
+	/**
+     * The default initial capacity - MUST be a power of two.
+     */
+    static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
+    /**
+     * The maximum capacity, used if a higher value is implicitly specified
+     * by either of the constructors with arguments.
+     * MUST be a power of two <= 1<<30.
+     */
+    static final int MAXIMUM_CAPACITY = 1 << 30;
+    /**
+     * The load factor used when none specified in constructor.
+     */
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    /**
+     * The bin count threshold for using a tree rather than list for a
+     * bin.  Bins are converted to trees when adding an element to a
+     * bin with at least this many nodes. The value must be greater
+     * than 2 and should be at least 8 to mesh with assumptions in
+     * tree removal about conversion back to plain bins upon
+     * shrinkage.
+     */
+    static final int TREEIFY_THRESHOLD = 8;
 ```
 
+一个一个的来分析 
 
+首先是第一个 `DEFAULT_INITIAL_CAPACITY` 代表的是HashMap默认初始数组长度为16
