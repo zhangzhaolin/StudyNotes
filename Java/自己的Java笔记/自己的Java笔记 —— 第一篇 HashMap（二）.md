@@ -4,7 +4,7 @@
 上一节 ：[简书](https://www.jianshu.com/p/8244a21bd2b4)
 
 ## 2.3 tableSizeFor函数
-先来看tableSizeFor函数的构成 : 
+先来看tableSizeFor函数的构成 :
 
 ```
 	/**
@@ -61,7 +61,7 @@
 
 我们发现当到运行至第二行后，就已经定下了解决，不管之后再怎样做或运算，结果会成为`0001 1111`，最会在加一就会成为`0010 0000`也就是32
 
-那若果`n = 01000 0000 0000 0000 0000 0000 0000 0000`呢？也就是说 `cap = (1 >> 30) + 1`，虽然在构造函数中有这样一句话 ： 
+那若果`n = 01000 0000 0000 0000 0000 0000 0000 0000`呢？也就是说 `cap = (1 >> 30) + 1`，虽然在构造函数中有这样一句话 ：
 
 ```
 	public HashMap(int initialCapacity, float loadFactor) {
@@ -111,7 +111,7 @@ int result = (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
 	public V put(K key, V value) {
         return putVal(hash(key), key, value, false, true);
     }
-    // ... 
+    // ...
     final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
                    boolean evict) {
         Node<K,V>[] tab; Node<K,V> p; int n, i;
@@ -120,13 +120,13 @@ int result = (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
             n = (tab = resize()).length;
         }
         // ...
-        
+
     }
 ```
 
 其实`putVal()`是一个很长的函数，但是数组的初始化只有这几行。
 
-具体再来看`resize()`函数是怎样初始化的 : 
+具体再来看`resize()`函数是怎样初始化的 :
 
 ```
 final Node<K,V>[] resize() {
@@ -135,8 +135,8 @@ final Node<K,V>[] resize() {
         int oldThr = threshold;
         int newCap, newThr = 0;
         // ...
-        else if (oldThr > 0) 
-	      // 如果你定义了初始容量就走这里了 
+        else if (oldThr > 0)
+	      // 如果你定义了初始容量就走这里了
           newCap = oldThr;
         else {               
         	// 无参构造函数就会到这里进行初始化
@@ -172,7 +172,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
         if ((tab = table) == null || (n = tab.length) == 0)
             n = (tab = resize()).length;
         // 接下来我们要分析以下代码
-        // ------> 
+        // ------>
         if ((p = tab[i = (n - 1) & hash]) == null)
             tab[i] = newNode(hash, key, value, null);
         else {
@@ -212,7 +212,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
     }
 ```
 
-先看这两行 : 
+先看这两行 :
 
 ```
 	public V put(K key, V value) {
@@ -235,7 +235,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 
 判断元素在数组的哪个位置位置其实就是 `(length - 1) & hash`
 
-那么 `hash`又是怎么来的？ 
+那么 `hash`又是怎么来的？
 
 ```
 	static final int hash(Object key) {
@@ -246,7 +246,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 
 当key时null的时候，hash值就是0；如果不是null，就计算key的hashCode()，并把结果右移16位，然后把两个做异或处理。这就是最后的hash()值
 
-那为何要这么做？知乎某位大佬给出了如下解释 ： 
+那为何要这么做？知乎某位大佬给出了如下解释 ：
 
 [JDK 源码中 HashMap 的 hash 方法原理是什么？](JDK 源码中 HashMap 的 hash 方法原理是什么？ - 知乎
 https://www.zhihu.com/question/20733617/answer/32513376)
@@ -262,7 +262,7 @@ https://www.zhihu.com/question/20733617/answer/32513376)
 
 我们发现，不管...是0还是1，只要最后四位是0的话，结果都会成为0，这就会造成很多碰撞
 
-根据这个情况，扰动函数出来了： 
+根据这个情况，扰动函数出来了：
 
 ![扰动函数](https://pic3.zhimg.com/80/4acf898694b8fb53498542dc0c5f765a_hd.png)
 
@@ -280,13 +280,13 @@ value="老古董",key="CN-Z17-18-00139",index(hash)=7
 
 ![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-22/49074801.jpg)
 
-我们再回头看put函数的其他情况 ： 
+我们再回头看put函数的其他情况 ：
 
 ```
 final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
                    boolean evict) {
         Node<K,V>[] tab; Node<K,V> p; int n, i;
-        // 数组初始化 
+        // 数组初始化
         // ...
         // 如果当前索引是空的 占位
         // ...
@@ -324,17 +324,20 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 
 ```
 
-先来看这一段代码 ： 
+先来看这一段代码 ：
 
 ```
 Node < K, V > e; K k;
+// ...
 // 如果待插入的节点和待在数组上的节点重了 就做替换
 if (p.hash == hash && ((k = p.key) == key || (key != null && key.equals(k)))) e = p;
 // ...
 if (e != null) { // existing mapping for key
     V oldValue = e.value;
-    if (!onlyIfAbsent || oldValue == null) e.value = value;
-    afterNodeAccess(e);
+    if (!onlyIfAbsent || oldValue == null)
+			e.value = value;
+		// 目前没有意义的一句话
+		afterNodeAccess(e);
     return oldValue;
 }
 ```
@@ -343,4 +346,3 @@ if (e != null) { // existing mapping for key
 
 - 待插入的和将要被替换的节点必须hash值相等。当然这里的hash值并不是简单的hash(key)，而是经过扰动算法“摧残”过的hash值。
 - 待插入的节点的key必须要等于将要被替换的key || 待插入的节点的key不能是null并且待插入和代替换的key的`equals()`要为true
-
