@@ -1,7 +1,7 @@
 # 自己的Java笔记 —— 第一篇 HashMap（二）
 
 ## 链接
-上一节 ：[简书](https://www.jianshu.com/p/8244a21bd2b4)
+上一节 ：[自己的Java笔记 —— 第一篇 HashMap（一）](https://www.jianshu.com/p/8244a21bd2b4)
 
 ## 2.3 tableSizeFor函数
 先来看tableSizeFor函数的构成 :
@@ -229,6 +229,8 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 	}
 ```
 
+### 2.5.1 判断索引位置以及扰动函数
+
 如何判断某个元素在哪个位置呢？
 
 > p = tab[i = (n-1) & hash]
@@ -324,6 +326,8 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 
 ```
 
+### 2.5.2 HashMap什么时候会发生替换
+
 先来看这一段代码 ：
 
 ```
@@ -346,3 +350,11 @@ if (e != null) { // existing mapping for key
 
 - 待插入的和将要被替换的节点必须hash值相等。当然这里的hash值并不是简单的hash(key)，而是经过扰动算法“摧残”过的hash值。
 - 待插入的节点的key必须要等于将要被替换的key || 待插入的节点的key不能是null并且待插入和代替换的key的`equals()`要为true
+
+上面两个条件必须同时满足才可以发生节点的替换。
+
+下一小节接着看HashMap的put函数
+
+
+
+
