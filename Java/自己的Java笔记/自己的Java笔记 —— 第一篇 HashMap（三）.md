@@ -1,6 +1,6 @@
 # 自己的Java笔记 —— 第一篇 HashMap（三）
 ## 链接
-上一节 ： [自己的Java笔记 —— 第一篇 HashMap（二](https://www.jianshu.com/p/97bd35ec4f8d)
+上一节 ： [自己的Java笔记 —— 第一篇 HashMap（二）](https://www.jianshu.com/p/97bd35ec4f8d)
 ## 2 HashMap的put函数
 ### 2.5.2 回顾
 
@@ -218,7 +218,7 @@ final Node<K,V>[] resize() {
     }
 ```
 
-先来看上面的一段代码 ： 
+先来看上面的一段代码 ：
 
 ```
 		Node<K,V>[] oldTab = table;
@@ -319,7 +319,7 @@ final Node<K,V>[] resize() {
         }
 ```
 
-扩容时，如果是一个链表，将会进行以下操作 ： 
+扩容时，如果是一个链表，将会进行以下操作 ：
 
 ```
 Node<K,V> loHead = null, loTail = null;
@@ -352,7 +352,7 @@ if (hiTail != null) {
 }
 ```
 
-我们先来看这一行 ： 
+我们先来看这一行 ：
 
 ```
 if ((e.hash & oldCap) == 0) {
@@ -360,7 +360,7 @@ if ((e.hash & oldCap) == 0) {
 }
 ```
 
-我们好像在前面见过类似的 是重新计算索引的 ： 
+我们好像在前面见过类似的 是重新计算索引的 ：
 
 ```
 e.hash & (newCap - 1)
@@ -368,3 +368,36 @@ e.hash & (newCap - 1)
 
 那么`e.hash & oldCap`是做什么的呢？
 
+我们先做一个示例 : oldCap = 32 newCap = 64
+
+下面是重新计算索引的示例 ：
+
+```
+newCap = 64 newCap - 1 = 63
+
+  0000 0000 0001 1111 oldCap - 1 旧索引值
+  0000 0000 0011 1111 newCap - 1 新索引值
+& 0010 1010 01?0 0110 hash(key)
+```
+我们发现，某个节点是否需要挪动位置，完全取决于?的位置 当?为0的时候 不需要挪动位置，当?为1的时候，需要挪动位置。
+
+然后，HashMap的开发人员发现了更为高级的判断方式 :
+
+```
+  0000 0000 0010 0000 oldCap
+& 0101 1101 01?0 1010 hash(key)
+```
+无论hash值是多少，如果?为0，那oldCap&hash结果就为0,如果?为1，那么oldCap&hash的结果就不是0，所以，在判断某个节点是否需要挪动位置的时候，oldCap&hash和(newCap-1)&hash的效果是一样的。
+
+美团的博客论坛中有更为详细的解释 : [Java 8系列之重新认识HashMap
+](https://tech.meituan.com/java_hashmap.html)
+
+> 经过观测可以发现，我们使用的是2次幂的扩展(指长度扩为原来2倍)，所以，元素的位置要么是在原位置，要么是在原位置再移动2次幂的位置。看下图可以明白这句话的意思，n为table的长度，图（a）表示扩容前的key1和key2两种key确定索引位置的示例，图（b）表示扩容后key1和key2两种key确定索引位置的示例，其中hash1是key1对应的哈希与高位运算结果。
+
+![](https://tech.meituan.com/img/java-hashmap/hashMap%201.8%20%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E4%BE%8B%E5%9B%BE1.png)
+
+> 元素在重新计算hash之后，因为n变为2倍，那么n-1的mask范围在高位多1bit(红色)，因此新的index就会发生这样的变化：
+
+![哈希算法例图](https://tech.meituan.com/img/java-hashmap/hashMap%201.8%20%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E4%BE%8B%E5%9B%BE2.png)
+
+综上所述，oldCap & hash可以判断元素是否需要重新移动位置。
