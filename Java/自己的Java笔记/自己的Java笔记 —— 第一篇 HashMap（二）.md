@@ -8,20 +8,18 @@
 
 ```
 	/**
-     * Returns a power of two size for the given target capacity.
-     */
-    static final int tableSizeFor(int cap) {
-        int n = cap - 1;
-        n |= n >>> 1;
-        n |= n >>> 2;
-        n |= n >>> 4;
-        n |= n >>> 8;
-        n |= n >>> 16;
-        return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
-    }
+	 * Returns a power of two size for the given target capacity.
+	 */
+	static final int tableSizeFor(int cap) {
+		int n = cap - 1;
+		n |= n >>> 1;
+		n |= n >>> 2;
+		n |= n >>> 4;
+		n |= n >>> 8;
+		n |= n >>> 16;
+		return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+	}
 ```
-
-我把这些代码粘贴复制让它们运行了起来 结果不可思议
 
 ```
     private static final int MAXIMUM_CAPACITY = 1 << 30;
@@ -39,8 +37,7 @@
     }
 ```
 
-结果打印为32 那这些代码是怎样将18转换成为了一个比他大有离他最近的一个二次幂整数呢？另外，右移难道不是越右移越小才对嘛？
-
+结果打印为32 那这些代码是怎样将18转换成为了一个比他大有离他最近的一个二次幂整数呢？
 
 ```
 0000 0000 0001 0001 (17)
@@ -64,12 +61,12 @@
 那若果`n = 01000 0000 0000 0000 0000 0000 0000 0000`呢？也就是说 `cap = (1 >> 30) + 1`，虽然在构造函数中有这样一句话 ：
 
 ```
-	public HashMap(int initialCapacity, float loadFactor) {
-        // ...
-        if (initialCapacity > MAXIMUM_CAPACITY)
-            initialCapacity = MAXIMUM_CAPACITY;
-		// ...
-    }
+public HashMap(int initialCapacity, float loadFactor) {
+	// ...
+  if (initialCapacity > MAXIMUM_CAPACITY)
+  	initialCapacity = MAXIMUM_CAPACITY;
+	// ...
+}
 ```
 
 但是为什么要这样？
@@ -99,7 +96,7 @@ int result = (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
 
 如果没有判断的话 n+1就成了负数。所以说 1 >>> 30 是int类型中最大的二次幂整数，如果在构造函数中声名了比他还大的一个数并且没有任何约束条件的话，最后会变成一个悲剧（也就会成为负数）。
 
-通过上面两个异或操作 不难看出`tableSizeFor()`函数就是把二进制中的0变成1，当然不是数字前面的0，而是数字后面的0。
+通过上面两个异或操作 不难看出`tableSizeFor()`函数就是找到二进制中的第一个1，并把这个1后面的0全部变成1。
 
 ## 2.4 数组的初始化
 
@@ -107,21 +104,19 @@ int result = (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
 
 ```
 	transient Node<K,V>[] table;
-    // ...
+	// ...
 	public V put(K key, V value) {
-        return putVal(hash(key), key, value, false, true);
-    }
-    // ...
-    final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
-                   boolean evict) {
-        Node<K,V>[] tab; Node<K,V> p; int n, i;
-        if ((tab = table) == null || (n = tab.length) == 0)
-            // 数组的初始化
-            n = (tab = resize()).length;
-        }
-        // ...
-
-    }
+		return putVal(hash(key), key, value, false, true);
+	}
+	// ...
+	final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+				   boolean evict) {
+		Node<K,V>[] tab; Node<K,V> p; int n, i;
+		if ((tab = table) == null || (n = tab.length) == 0)
+			// 数组的初始化
+			n = (tab = resize()).length;
+	}
+	// ...
 ```
 
 其实`putVal()`是一个很长的函数，但是数组的初始化只有这几行。
@@ -159,6 +154,8 @@ final Node<K,V>[] resize() {
         return newTab;
     }
 ```
+
+总的来说，在初始化阶段，先计算数组的容量，再计算数组的阈值。
 
 ## 2.5 HashMap的put操作
 
@@ -215,18 +212,14 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 先看这两行 :
 
 ```
-	public V put(K key, V value) {
-        return putVal(hash(key), key, value, false, true);
-    }
-    // ...
-	final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
-                   boolean evict) {
-        // ...
-        // 如果数组有位置 就把节点放在这个位置上
-        if ((p = tab[i = (n - 1) & hash]) == null)
-            tab[i] = newNode(hash, key, value, null);
-        // ...
-	}
+// ...
+final V putVal(int hash, K key, V value, boolean onlyIfAbsent, boolean evict) {
+	// ...
+  // 如果数组有位置 就把节点放在这个位置上
+  if ((p = tab[i = (n - 1) & hash]) == null)
+    tab[i] = newNode(hash, key, value, null);
+  // ...
+}
 ```
 
 ### 2.5.1 判断索引位置以及扰动函数
@@ -354,7 +347,3 @@ if (e != null) { // existing mapping for key
 上面两个条件必须同时满足才可以发生节点的替换。
 
 下一小节接着看HashMap的put函数
-
-
-
-
