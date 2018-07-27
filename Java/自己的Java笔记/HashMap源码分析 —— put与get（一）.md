@@ -190,4 +190,4 @@ int threshold;
 听上去有点绕口，简单点说15进去了成了16，17进去了出来摇身一变成了32（比17大的最小二次幂整数就是32了），非常神奇的一个函数，第二小篇接着看这个函数。
 
 
-下一小节 ： [自己的Java笔记 —— 第一篇 HashMap（二）](https://www.jianshu.com/p/97bd35ec4f8d)
+下一小节 ： [自己的Java笔记 —— 第一篇 HashMap（二）](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20put%E4%B8%8Eget%EF%BC%88%E4%BA%8C%EF%BC%89.md)

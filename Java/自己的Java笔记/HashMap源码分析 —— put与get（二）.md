@@ -1,7 +1,7 @@
 # HashMap源码分析 —— put与get（二）
 
 ## 链接
-上一节 ：[自己的Java笔记 —— 第一篇 HashMap（一）](https://www.jianshu.com/p/8244a21bd2b4)
+上一节 ：[自己的Java笔记 —— 第一篇 HashMap（一）](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20put%E4%B8%8Eget%EF%BC%88%E4%B8%80%EF%BC%89.md)
 
 ## 2.3 tableSizeFor函数
 先来看tableSizeFor函数的构成 :
@@ -346,4 +346,4 @@ if (e != null) { // existing mapping for key
 
 上面两个条件必须同时满足才可以发生节点的替换。
 
-下一小节接着看HashMap的put函数
+下一节 : [put和get(三)](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20put%E4%B8%8Eget%EF%BC%88%E4%B8%89%EF%BC%89.md)
