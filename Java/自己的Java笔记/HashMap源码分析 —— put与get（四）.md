@@ -70,7 +70,7 @@
 
 下面图片是美团技术团队的put函数的流程总结 :
 
-![](https://tech.meituan.com/img/java-hashmap/hashMap%20put%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
+![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-27/76780290.jpg)
 
 ## 2.7 脚步加快 —— get()函数
 
