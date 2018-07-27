@@ -1,4 +1,4 @@
-# 自己的Java笔记 —— 第一篇 HashMap（四）
+、# HashMap源码分析 —— put与get（四）
 
 ## 链接
 
@@ -42,7 +42,7 @@
 
 不难看出，`loHead`和`loTail`两个节点分别记录不需要移动的链表的头部和尾部，`hiHead`和`hiTail`分别记录需要移动的链表头部和尾部.
 
-假设在扩容的时候某个数组下有这样一个链表 : 
+假设在扩容的时候某个数组下有这样一个链表 :
 
 ![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-25/28481902.jpg)
 
@@ -54,19 +54,23 @@
 
 ![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-25/48045779.jpg)
 
-第三步 : 
+第三步 :
 
 ![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-25/14539380.jpg)
 
 ...
 
-下一步 :
+第N步 :
 
 ![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-25/66532230.jpg)
 
-最后一步 : 
+最后一步 :
 
 把以`loHead`为首的链表放到数组的原位置，把以`hiHead`为首的链表放到`原位置+oldCap`的位置，这就是链表的扩容操作
+
+下面图片是美团技术团队的put函数的流程总结 :
+
+![](https://tech.meituan.com/img/java-hashmap/hashMap%20put%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
 
 ## 2.7 脚步加快 —— get()函数
 
@@ -98,7 +102,7 @@
     }
 ```
 
-首先看下条件 : 
+首先看下条件 :
 
 ```
 // 数组不能是空的 数组的长度必须要大于0 数组当前索引有节点存在
@@ -108,7 +112,7 @@ if ((tab = table) != null && (n = tab.length) > 0 &&
 }
 ```
 
-然后，如果第一个节点正好就是要找的，那就直接返回吧 : 
+然后，如果第一个节点正好就是要找的，那就直接返回吧 :
 
 ```
 if (first.hash == hash && // always check first node
@@ -130,14 +134,14 @@ if ((e = first.next) != null) {
 }
 ```
 
-2.8 HashMap的最后一个构造函数
+## 2.8 HashMap的最后一个构造函数
 
 最后一个构造函数如下 ：
 
 ```
 public HashMap(Map<? extends K, ? extends V> m) {
    // 加载因子直接设置成默认的
-	this.loadFactor = DEFAULT_LOAD_FACTOR;
+   this.loadFactor = DEFAULT_LOAD_FACTOR;
    putMapEntries(m, false);
 }
 ```
@@ -148,7 +152,9 @@ public HashMap(Map<? extends K, ? extends V> m) {
     final void putMapEntries(Map<? extends K, ? extends V> m, boolean evict) {
         int s = m.size();
         if (s > 0) {
+            // 其实构造函数时 table是null
             if (table == null) { // pre-size
+                // 初始化数据的容量
                 float ft = ((float)s / loadFactor) + 1.0F;
                 int t = ((ft < (float)MAXIMUM_CAPACITY) ?
                          (int)ft : MAXIMUM_CAPACITY);
@@ -157,6 +163,7 @@ public HashMap(Map<? extends K, ? extends V> m) {
             }
             else if (s > threshold)
                 resize();
+            // 遍历要插入的map中的每一个节点 并把它们插入到调用它的map中
             for (Map.Entry<? extends K, ? extends V> e : m.entrySet()) {
                 K key = e.getKey();
                 V value = e.getValue();
@@ -166,3 +173,5 @@ public HashMap(Map<? extends K, ? extends V> m) {
     }
 
 ```
+
+其实除了构造器中调用了`putMapEntries`函数之外，还有`putAll()`函数调用了它

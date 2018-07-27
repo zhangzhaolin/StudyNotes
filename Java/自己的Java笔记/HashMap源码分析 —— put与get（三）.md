@@ -1,4 +1,4 @@
-# 自己的Java笔记 —— 第一篇 HashMap（三）
+# HashMap源码分析 —— put与get（三）
 ## 链接
 上一节 ： [自己的Java笔记 —— 第一篇 HashMap（二）](https://www.jianshu.com/p/97bd35ec4f8d)
 ## 2 HashMap的put函数
