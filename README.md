@@ -10,5 +10,5 @@
 ### 自己的Java学习笔记 : 
 
 - [HashMap的put和get函数](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94put%E5%92%8Cget%EF%BC%88%E6%80%BB%EF%BC%89.md)
-- [序列化和反序列化](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94put%E5%92%8Cget%EF%BC%88%E6%80%BB%EF%BC%89.md)
+- [序列化和反序列化](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.md)
 - 为什么说HashMap是不安全的(即将开坑...)
