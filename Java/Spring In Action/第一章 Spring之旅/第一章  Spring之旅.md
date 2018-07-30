@@ -238,24 +238,19 @@ knights.xml
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-
     <bean id="rescueDamselQuest" class="com.springinaction.quest.RescueDamselQuest">
         <constructor-arg value="#{T(System).out}"/>
     </bean>
-
     <bean id="SlayDragonQuest" class="com.springinaction.quest.SlayDragonQuest">
         <constructor-arg value="#{T(System).out}"/>
     </bean>
-
     <bean id="braveKnight" class="com.springinaction.knights.BraveKnight">
         <constructor-arg ref="rescueDamselQuest"/>
     </bean>
-
     <!-- 吟游诗人 -->
     <bean id="minstrel" class="com.springinaction.minstrel.Minstrel">
         <constructor-arg value="#{T(System).out}"/>
     </bean>
-
     <aop:config>
 
         <!-- 把吟游诗人声明为一个切面 -->
@@ -292,12 +287,124 @@ knights.xml
 使用模板消除样板式代码
 --
 
-为了实现简单的功能或者任务，不得不重复写一些重复冗长的代码，比如查询数据库。这就是样板式代码。
+为了实现简单的功能或者任务，不得不重复写一些重复冗长的代码，比如查询数据库。这就是样板式代码 ：
 
-我把例子写到了码云和GitHub中，感觉书中这一段就是一段简单的描述：
+```java
+package com.springinaction;
 
-- [码云 Spirng in action实战demo](https://gitee.com/zhangzhaolin/springShiZhandemo)
-- [Github Spirng in action实战demo](https://github.com/zhangzhaolin/spring-demo)
+import java.sql.*;
+
+public class BookMain {
+    public static void main(String []args){
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Book book = new Book();
+        try{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/graduate?serverTimezone=GMT&useSSL=true","root","root");
+			statement = con.prepareStatement("SELECT * FROM BOOK WHERE author = ?");
+			statement.setString(1,"施瓦辛格");
+			resultSet = statement.executeQuery();
+			while(resultSet.next()){
+				book.setId(resultSet.getLong("id"));
+				book.setDescription(resultSet.getString("description"));
+				book.setTitle(resultSet.getString("title"));
+				book.setIsbn(resultSet.getString("isbn"));
+				book.setAuthor(resultSet.getString("author"));
+				System.out.println(book);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+        	if(resultSet!=null){
+				try {
+					resultSet.close();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+			if (statement != null){
+				try {
+					statement.close();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+			if (con != null){
+				try {
+					con.close();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+    }
+}
+```
+
+
+
+如果说使用了Spring的`JdbcTemplate`的话，事情会变得比较简单 ： 
+
+首先需要进行数据库的通用配置，假设文件名为`applicationContext.xml`
+
+```xml
+
+    <!--数据源的配置 -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <constructor-arg name="url" value="jdbc:mysql://127.0.0.1/graduate?serverTimezone=GMT&amp;useSSL=true"/>
+        <constructor-arg name="username" value="root"/>
+        <constructor-arg name="password" value="root"/>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+```
+
+之后再创建`BookJdbcTemplate`类，操作底层数据库（增、删、改、查）：
+
+PS ： 书上这一块儿写的比较简略，我稍微改了一些内容，并不是那么与时俱进的加入了JDK8的`Lamada`表达式（毕竟JDK11都快呼之欲出了）
+
+```java
+@Repository
+public class BookJdbcTemplate {
+    private final JdbcTemplate jdbcTemplate;
+    @Autowired
+    public BookJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+    public Book getBookById(Long id){
+    	// sql查询
+        String sql = "SELECT * FROM BOOK WHERE ID = ?";
+        Book book = new Book();
+        RowMapper<Book> mapper = (rs , rowNum) -> {
+            book.setAuthor(rs.getString("author"));
+            book.setDescription(rs.getString("description"));
+            book.setId(rs.getLong("id"));
+            book.setIsbn(rs.getString("isbn"));
+            book.setTitle(rs.getString("title"));
+            return book;
+        };
+        return jdbcTemplate.queryForObject(sql , mapper , id);
+    }
+}
+```
+
+之后就是主程序的编写了 ：
+
+```java
+ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+JdbcTemplate jdbcTemplate =  context.getBean(JdbcTemplate.class);
+BookJdbcTemplate template = new BookJdbcTemplate(jdbcTemplate);
+try {
+	Book book = template.getBookById(1L);
+	System.out.println(book);
+}catch (EmptyResultDataAccessException ex){
+	System.out.println("未找到或找到多条数据.");
+}
+```
 
 spring通过**面向 POJO 编程、DI、切面和模板技术**来简化 Java 开发中的复杂性。
 
@@ -305,11 +412,13 @@ spring通过**面向 POJO 编程、DI、切面和模板技术**来简化 Java �
 容纳你的Bean：Spring容器
 --
 
-在基于Spring的应用中，你的应用对象生存与Spring容器中（container）中，Spring容器负责创建对象，装配它们，配置它们，并管理它们的整个生命周期从生存到死亡。
+在基于Spring的应用中，你的应用对象生存与Spring容器中（container）中，Spring容器负责**创建对象，装配它们，配置它们，并管理它们的整个生命周期从生存到死亡**。
 
 容器是Spring框架的核心，Spring容器使用DI管理构成应用的组件，它会创建相互协作的组件之间的关联。
 
-Spring的容器并不是一个，Spring自带了多个容器实现，可以归为两个不同的类型：bean工厂和应用上下文。bean工厂是最简单的容器，提供基本的依赖注入支持。应用上下文基于`BeanFactory`构建，并提供应用框架级别的服务，例如从属性文件解析文本以及发布应用事件给感兴趣的事件监听者。
+Spring的容器并不是一个，Spring自带了多个容器实现，可以归为两个不同的类型：**bean工厂和应用上下文**。
+
+bean工厂是最简单的容器，提供基本的依赖注入支持。应用上下文基于`BeanFactory`构建，并提供应用框架级别的服务，例如从属性文件解析文本以及发布应用事件给感兴趣的事件监听者。
 
 ![BeanFactory和ApplicationContext][3]
 
@@ -318,11 +427,11 @@ Spring的容器并不是一个，Spring自带了多个容器实现，可以归�
 使用应用上下文
 --
 
-`AnnotationConfigApplicationContext` ： 从一个或多个**基于Java的配置类**中加载Spring应用上下文。
-`AnnotationConfigWebApplicationContext`：从一个或多个**基于Java配置类**中加载Spring web应用上下文。
-`ClassPathXmlApplicationContext`：从classpath路径下的一个或多个XML配置文件中加载上下文定义，把应用上下文的定义文件作为类资源。
-`FileSystemXmlApplicationContext`：从文件系统下的一个或多个XML配置文件中加载上下文定义。
-`XmlWebApplicationContext`：从WEB应用下的一个或多个XML配置文件中加载上下文定义。
+- `AnnotationConfigApplicationContext` ： 从一个或多个**基于Java的配置类**中加载Spring应用上下文。
+- `AnnotationConfigWebApplicationContext`：从一个或多个**基于Java配置类**中加载Spring web应用上下文。
+- `ClassPathXmlApplicationContext`：从classpath路径下的一个或多个XML配置文件中加载上下文定义，把应用上下文的定义文件作为类资源。
+- `FileSystemXmlApplicationContext`：从文件系统下的一个或多个XML配置文件中加载上下文定义。
+- `XmlWebApplicationContext`：从WEB应用下的一个或多个XML配置文件中加载上下文定义。
 
 无论是从类中还是从文件系统中加载应用上下文都是类似的：
 例如，下面是从类路径中加载：
@@ -343,22 +452,24 @@ bean 的声明周期
 
 ![bean的声明周期][4]
 
->作者：MOBIN-F
-链接：https://www.zhihu.com/question/38597960/answer/77600561
-来源：知乎
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+bean的声明周期经常会被问到，但是却又很难记忆 （建议把接下来的打印下来每天记忆）：
 
->1.Spring对Bean进行实例化（相当于程序中的newXx()）
-2.Spring将值和Bean的引用注入进Bean对应的属性中
-3.如果Bean实现了BeanNameAware接口，Spring将Bean的ID传递给setBeanName()方法（实现BeanNameAware清主要是为了通过Bean的引用来获得Bean的ID，一般业务中是很少有用到Bean的ID的）
-4.如果Bean实现了BeanFactoryAware接口，Spring将调用setBeanDactory(BeanFactory bf)方法并把BeanFactory容器实例作为参数传入。（实现BeanFactoryAware主要目的是为了获取Spring容器，如Bean通过Spring容器发布事件等）
-5.如果Bean实现了ApplicationContextAwaer接口，Spring容器将调用setApplicationContext(ApplicationContext ctx)方法，把y应用上下文作为参数传入.(作用与BeanFactory类似都是为了获取Spring容器，不同的是Spring容器在调用setApplicationContext方法时会把它自己作为setApplicationContext 的参数传入，而Spring容器在调用setBeanDactory前需要程序员自己指定（注入）setBeanDactory里的参数BeanFactory )
-6.如果Bean实现了BeanPostProcess接口，Spring将调用它们的postProcessBeforeInitialization（预初始化）方法（作用是在Bean实例创建成功后对进行增强处理，如对Bean进行修改，增加某个功能）
-7.如果Bean实现了InitializingBean接口，Spring将调用它们的afterPropertiesSet方法，作用与在配置文件中对Bean使用init-method声明初始化的作用一样，都是在Bean的全部属性设置成功后执行的初始化方法。
-8.如果Bean实现了BeanPostProcess接口，Spring将调用它们的postProcessAfterInitialization（后初始化）方法（作用与6的一样，只不过6是在Bean初始化前执行的，而这个是在Bean初始化后执行的，时机不同 )
-9.经过以上的工作后，Bean将一直驻留在应用上下文中给应用使用，直到应用上下文被销毁
-10.如果Bean实现了DispostbleBean接口，Spring将调用它的destory方法，作用与在配置文件中对Bean使用destory-method属性的作用一样，都是在Bean实例销毁前执行的方法。
-参考：Spring实战
+>作者：MOBIN-F
+>链接：https://www.zhihu.com/question/38597960/answer/77600561
+>来源：知乎
+>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+>- Spring对Bean进行实例化（相当于程序中的newXx()）
+>- Spring将值和Bean的引用注入进Bean对应的属性中
+>- 如果Bean实现了`BeanNameAware`接口，Spring将Bean的ID传递给`setBeanName()`方法（实现`BeanNameAware`清主要是为了通过Bean的引用来获得Bean的ID，一般业务中是很少有用到Bean的ID的）
+>- 如果Bean实现了`BeanFactoryAware`接口，Spring将调用`setBeanDactory(BeanFactory bf)`方法并把`BeanFactory`容器实例作为参数传入。（**实现`BeanFactoryAware`主要目的是为了获取Spring容器，如Bean通过Spring容器发布事件等）**
+>- 如果Bean实现了`ApplicationContextAware`接口，Spring容器将调用`setApplicationContext(ApplicationContext ctx)`方法，把应用上下文作为参数传入。**(作用与BeanFactory类似都是为了获取Spring容器，不同的是Spring容器在调用setApplicationContext方法时会把它自己作为`setApplicationContext `的参数传入，而Spring容器在调用`setBeanDactory`前需要程序员自己指定（注入）setBeanDactory里的参数BeanFactory )**
+>- 如果Bean实现了`BeanPostProcess`接口，Spring将调用它们的`postProcessBeforeInitialization`（预初始化）方法**（作用是在Bean实例创建成功后对进行增强处理，如对Bean进行修改，增加某个功能）**
+>- 如果Bean实现了`InitializingBean`接口，Spring将调用它们的`afterPropertiesSet`方法，作用与在配置文件中对Bean使用init-method声明初始化的作用一样，都是在Bean的全部属性设置成功后执行的初始化方法。
+>- 如果Bean实现了`BeanPostProcess`接口，Spring将调用它们的`postProcessAfterInitialization`（后初始化）方法（**作用与6的一样，只不过6是在Bean初始化前执行的，而这个是在Bean初始化后执行的，时机不同 )**
+>- 经过以上的工作后，Bean将一直驻留在应用上下文中给应用使用，直到应用上下文被销毁
+>
+>- 如果Bean实现了`DispostbleBean`接口，Spring将调用它的destory方法，作用与在配置文件中对Bean使用destory-method属性的作用一样，都是在Bean实例销毁前执行的方法。
 
 Spring模块
 --
