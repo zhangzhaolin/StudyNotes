@@ -186,7 +186,7 @@ public class SgtPeppers implements CompactDisc {
 
 ## 设置组件扫描的基础包
 
-```
+```java
 @ComponentScan(basePackages = {"soundsystem","video"})
 public class CDPlayerConfig {
     // ...
@@ -229,7 +229,7 @@ public class CDPlayer implements MediaPlayer {
 
 @Autowired 不仅可以用在构造器上，还可以用在属性的Setter方法（或其他任何方法）上。
 
-```
+```java
 @Autowired
 public void insertDisc(CompactDisc compactDisc){
     this.compactDisc = compactDisc;
@@ -240,7 +240,7 @@ public void insertDisc(CompactDisc compactDisc){
 
 如果没有匹配的bean，那么在应用上下文创建的时候，Spring会抛出一个异常，为了避免异常的出现，可以将@Autowired的required属性设置为false
 
-```
+```java
 @Autowired(required = false)
 public void insertDisc(CompactDisc compactDisc){
     this.compactDisc = compactDisc;
@@ -269,16 +269,12 @@ public class CDPlayerConfig {
 
 ## 声明简单的bean
 
-```
+```java
 @Configuration
 public class CDPlayerConfig {
     @Bean
     public CompactDisc sgtPeppers(){
         return new SgtPeppers();
-    }
-    @Bean
-    public CDPlayer cdPlayer(CompactDisc compactDisc){
-        return new CDPlayer(compactDisc);
     }
 }
 ```
@@ -326,7 +322,7 @@ public CDPlayer anthorCDPlayer(CompactDisc compactDisc){
 }
 ```
 
-默认情况下，SPirng中的bean都是单例的，所以，Spring会拦截对sgtPeppers()的调用并确保返回的是Sprring所创建的bean ， 在这里，bean就是Spirng在调用sgtPeppers()时所创建的CompactDisc bean 。 
+**默认情况下，SPirng中的bean都是单例的**，所以，Spring会拦截对sgtPeppers()的调用并确保返回的是Sprring所创建的`bean `，在这里，bean就是Spirng在调用sgtPeppers()时所创建的`CompactDisc bean`
 
 还有另一种写法：
 ```
@@ -349,7 +345,7 @@ public class CDPlayerConfig {
 ==
 
 spring-config.xml
-```
+```java
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -397,12 +393,12 @@ spring-config.xml
 <bean id="cdPlayer" class="soundsystem.mediaplayer.CDPlayer" c:_0-ref="sgtPeppers"/>
 ```
 
-c:_0-ref 中的 _0 表示参数的索引 , 使用索引来识别会比使用名称识别构造器参数更好一些。
+c:_0-ref 中的 _0 表示参数的索引 , 使用索引来识别会比使用名称识别构造器参数更好一些（因为构造器的参数可能会改变）。
 
 ### 将字面量（字符串）注入到构造器中
 
 BlankDisc.class 
-```
+```java
 public class BlankDisc implements CompactDisc {
     private String title;
     private String artist;
@@ -418,7 +414,7 @@ public class BlankDisc implements CompactDisc {
 ```
 
 spring-config.xml
-```
+```xml
 <bean id="blankDisc" class="soundsystem.compactdisc.BlankDisc">
 	<constructor-arg value="Sgt. Pepper's Lonely Hearts Club Band"/>
 	<constructor-arg value="The Beatles"/>
@@ -430,7 +426,7 @@ spring-config.xml
 更为简单的写法：
 
 spring-config.xml ————  通过索引
-```
+```xml
 <bean id="blankDisc" class="soundsystem.compactdisc.BlankDisc" c:_0="Sgt. Pepper's Lonely Hearts Club Band" c:_1="The Beatles"/>
 ```
 
@@ -503,7 +499,7 @@ spring-config.xml
 ## 借助setter初始化bean
 
 CDPlayer.class
-```
+```java
 public class CDPlayer implements MediaPlayer {
     private CompactDisc compactDisc;
     public void setCompactDisc(CompactDisc compactDisc){
@@ -517,7 +513,7 @@ public class CDPlayer implements MediaPlayer {
 ```
 
 spring-config.xml
-```
+```xml
 <bean id="cdPlayer" class="soundsystem.mediaplayer.CDPlayer">
 		<property name="compactDisc" ref="sgtPeppers"/>
 	</bean>
@@ -537,7 +533,7 @@ spring-config.xml
 ### 将字面值注入到属性中
 
 BlankDisc.class
-```
+```java
 public class BlankDisc implements CompactDisc {
 
     private String title;
@@ -567,7 +563,7 @@ public class BlankDisc implements CompactDisc {
 ```
 
 spring-config.xml
-```
+```xml
 <bean id="sgtPeppers" class="soundsystem.compactdisc.BlankDisc">
 		<property name="title" value="Sgt. Pepper's Lonely Hearts Club Band"/>
 		<property name="artist" value="The Beatles"/>
@@ -582,7 +578,7 @@ spring-config.xml
 ```
 
 同样的，也可以使用p-命名空间的方式：
-```
+```java
 <bean id="blankDisc" class="soundsystem.compactdisc.BlankDisc" p:title="Sgt. Pepper's Lonely Hearts Club Band" p:artist="The Beatles">
 		<property name="tracks">
 			<list>
@@ -596,15 +592,15 @@ spring-config.xml
 
 我们可以使用util-命名空间的方式来简化bean：
 我们可以把磁道列表转移到`blankDisc bean` 之外，并将其声明到单独的bean 之中，如下所示：
-```
+```xml
 <util:list id="tracks">
-		<value>track1</value>
-		<value>track2</value>
-	</util:list>
+	<value>track1</value>
+	<value>track2</value>
+</util:list>
 ```
 
 这样，我们就可以简化blankDisc bean的定义了：
-```
+```java
 <bean id="sgtPeppers" class="soundsystem.compactdisc.BlankDisc" p:title="Sgt. Pepper's Lonely Hearts Club Band" p:artist="The Beatles" p:tracks-ref="tracks">
 	</bean>
 ```
@@ -641,7 +637,7 @@ public class CDPlayerConfig {
 }
 ```
 
-我们需要将这两个config类组合到一起，第一种方法是直接在`CDPlayerConfig.class`使用@Import注解导入`CDConfgi.class`
+我们需要将这两个config类组合到一起，第一种方法是直接在`CDPlayerConfig.class`使用@Import注解导入`CDConfig.class`
 
 ```
 @Configuration
@@ -694,7 +690,7 @@ public class SoundSystemConfig {
 ## 在XML配置中引用JavaConfig
 
 cd-config.xml
-```
+```xml
 <bean id="compactDisc" class="soundsystem.compactdisc.BlankDisc" p:title="Sgt. Pepper's Lonely Hearts Club Band" p:artist="The Beatles">
         <property name="tracks">
             <list>
@@ -707,7 +703,7 @@ cd-config.xml
 ```
 
 spring-context.xml
-```
+```xml
 <import resource="cd-config.xml"/>
 
     <bean id="cdPlayer" class="soundsystem.mediaplayer.CDPlayer" c:_0-ref="compactDisc">
@@ -719,7 +715,7 @@ spring-context.xml
 `<import>` 元素可以导入其他的XML配置文件，但是不可以导入JavaConfig类
 
 所以，我们可以使用下面的方法引用：
-```
+```xml
 <bean class="soundsystem.config.CDConfig"/>
 
     <bean id="cdPlayer" class="soundsystem.mediaplayer.CDPlayer" c:_0-ref="compactDisc"/>
@@ -728,9 +724,19 @@ spring-context.xml
 小结
 ==
 
-Spring中装配bean的三种主要方式：自动化配置，基于Java的显示配置，以及基于XML的显示配置
+Spring中装配bean的三种主要方式：自动化配置，基于Java的显示配置，以及基于XML的显示配置。
 
+我们主要学习了以下注解/XML的使用：
 
+- `@ComponentScan` 以及 `@Component`
+- `<context:component-scan base-package=""/>`
+- `@Configuration`以及`@Bean`
+- `@Autowired`实现自动装配
+- `<bean><bean>`以及`id`、`class`、`c:_0||c:xxx`、`c:_0-ref||c:xxx-ref`、`p:xx||p:xx-ref`属性
+- `<constructor-arg>`以及`<property>`以及`ref`、`value`属性
+- `<util:list>`
+- `@Import`注解导入其他`Configuration`，`@ImportResource`导入其他XML文档
+- `<import resource="xxx">`导入其他XML文件
 
 
 
