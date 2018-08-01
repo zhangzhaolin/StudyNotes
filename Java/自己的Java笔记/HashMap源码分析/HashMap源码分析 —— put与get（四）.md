@@ -2,7 +2,7 @@
 
 ## 链接
 
-上一节 : [自己的Java笔记 —— 第一篇 HashMap（三）](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20put%E4%B8%8Eget%EF%BC%88%E4%B8%89%EF%BC%89.md)
+上一节 : [自己的Java笔记 —— 第一篇 HashMap（三）](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20put%E4%B8%8Eget%EF%BC%88%E4%B8%89%EF%BC%89.md)
 
 
 ## 2.6 resize()扩容操作
@@ -176,4 +176,4 @@ public HashMap(Map<? extends K, ? extends V> m) {
 
 其实除了构造器中调用了`putMapEntries`函数之外，还有`putAll()`函数调用了它
 
-下一节 ： [put与]()
+下一节 ： [put与get函数(总)](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94put%E5%92%8Cget%EF%BC%88%E6%80%BB%EF%BC%89.md)

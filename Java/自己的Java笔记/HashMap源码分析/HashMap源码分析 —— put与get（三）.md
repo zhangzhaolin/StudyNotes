@@ -1,6 +1,6 @@
 # HashMap源码分析 —— put与get（三）
 ## 链接
-上一节 ： [自己的Java笔记 —— 第一篇 HashMap（二）](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20put%E4%B8%8Eget%EF%BC%88%E4%BA%8C%EF%BC%89.md)
+上一节 ： [自己的Java笔记 —— 第一篇 HashMap（二）](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20put%E4%B8%8Eget%EF%BC%88%E4%BA%8C%EF%BC%89.md)
 ## 2 HashMap的put函数
 ### 2.5.2 回顾
 
@@ -401,3 +401,5 @@ newCap = 64 newCap - 1 = 63
 ![哈希算法例图](https://tech.meituan.com/img/java-hashmap/hashMap%201.8%20%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E4%BE%8B%E5%9B%BE2.png)
 
 综上所述，oldCap & hash可以判断元素是否需要重新移动位置。
+
+下一篇 ：[HashMap源码分析-put和get(四)](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20put%E4%B8%8Eget%EF%BC%88%E5%9B%9B%EF%BC%89.md)
