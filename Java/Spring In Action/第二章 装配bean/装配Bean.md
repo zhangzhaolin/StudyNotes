@@ -1,4 +1,4 @@
-﻿# 装配Bean
+# 装配Bean
 
 [TOC]
 
@@ -209,7 +209,7 @@ public class CDPlayerConfig {
 
 **自动装配：自动装配就是让Spring自动满足bean依赖的一种方法，在满足依赖的过程中，会在Spring应用上下文中寻找匹配某个bean需求的其他bean 。为了声明要进行自动匹配，我们可以借助Spring中的 `@Autowired` 注解 。**
 
-```
+```java
 @Component
 public class CDPlayer implements MediaPlayer {
     private CompactDisc compactDisc;
@@ -254,7 +254,7 @@ public void insertDisc(CompactDisc compactDisc){
 通过Java代码装配bean
 ==
 
-当你需要将第三方库组件装配到你的应用中，是没有办法在它的类上加@Component和@Autowired注解的，这时候我们就需要显示的装配了。有两种可选方案：Java和XML 。
+**当你需要将第三方库组件装配到你的应用中，是没有办法在它的类上加@Component和@Autowired注解的**，这时候我们就需要显示的装配了。有两种可选方案：Java和XML 。
 
 ## 创建配置类
 
@@ -735,7 +735,7 @@ Spring中装配bean的三种主要方式：自动化配置，基于Java的显示
 
 
 
-  [1]: https://raw.githubusercontent.com/zhangzhaolin/spring-demo/master/%E5%9B%BE%E7%89%87/%E7%AC%AC%E4%BA%8C%E7%AB%A0/CD%E6%92%AD%E6%94%BE%E5%99%A8-%E5%88%86%E5%8C%85%E6%88%AA%E5%9B%BE.png
-  [2]: https://raw.githubusercontent.com/zhangzhaolin/spring-demo/master/%E5%9B%BE%E7%89%87/%E7%AC%AC%E4%BA%8C%E7%AB%A0/CD%E6%92%AD%E6%94%BE%E5%99%A8-XML%E9%85%8D%E7%BD%AE-%E5%88%86%E5%8C%85%E6%88%AA%E5%9B%BE.png
-  [3]: https://raw.githubusercontent.com/zhangzhaolin/spring-demo/eb651a2a72cf4334139144270f2a5d453f77656d/%E5%9B%BE%E7%89%87/%E7%AC%AC%E4%BA%8C%E7%AB%A0/c-%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4.png
-  [4]: https://raw.githubusercontent.com/zhangzhaolin/spring-demo/812e95487fcbdc68d715759d33861c9ebab25555/%E5%9B%BE%E7%89%87/%E7%AC%AC%E4%BA%8C%E7%AB%A0/Spring%20util-%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E5%85%83%E7%B4%A0.png
+[1]: https://raw.githubusercontent.com/zhangzhaolin/spring-demo/master/%E5%9B%BE%E7%89%87/%E7%AC%AC%E4%BA%8C%E7%AB%A0/CD%E6%92%AD%E6%94%BE%E5%99%A8-%E5%88%86%E5%8C%85%E6%88%AA%E5%9B%BE.png
+[2]: https://raw.githubusercontent.com/zhangzhaolin/spring-demo/master/%E5%9B%BE%E7%89%87/%E7%AC%AC%E4%BA%8C%E7%AB%A0/CD%E6%92%AD%E6%94%BE%E5%99%A8-XML%E9%85%8D%E7%BD%AE-%E5%88%86%E5%8C%85%E6%88%AA%E5%9B%BE.png
+[3]: https://raw.githubusercontent.com/zhangzhaolin/spring-demo/eb651a2a72cf4334139144270f2a5d453f77656d/%E5%9B%BE%E7%89%87/%E7%AC%AC%E4%BA%8C%E7%AB%A0/c-%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4.png
+[4]: https://raw.githubusercontent.com/zhangzhaolin/spring-demo/812e95487fcbdc68d715759d33861c9ebab25555/%E5%9B%BE%E7%89%87/%E7%AC%AC%E4%BA%8C%E7%AB%A0/Spring%20util-%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E5%85%83%E7%B4%A0.png
