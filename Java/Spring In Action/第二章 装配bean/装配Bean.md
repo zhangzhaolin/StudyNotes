@@ -27,7 +27,7 @@ Spring有两种角度来实现自动化装配
 
 CompactDisc.class - CD接口
 
-```
+```java
 package soundsystem.compactdisc;
 
 public interface CompactDisc {
@@ -37,7 +37,7 @@ public interface CompactDisc {
 
 SgtPeppers.class - CD接口实现类：一张专辑唱片
 
-```
+```java
 package soundsystem.compactdisc;
 
 import org.springframework.stereotype.Component;
@@ -60,7 +60,7 @@ public class SgtPeppers implements CompactDisc {
 ## 通过Java注解的方式开启组件扫描
 
 CDPlayerConfig.class - 定义Spring装配规则
-```
+```java
 package soundsystem.config;
 import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"soundsystem"})
@@ -77,7 +77,7 @@ public class CDPlayerConfig {
 
 CDPlayerTest.class - 测试文件
 
-```
+```java
 package soundsystem.test;
 
 import org.junit.Rule;
@@ -119,7 +119,7 @@ public class CDPlayerTest {
 ## 通过XML的方式开启组件扫描
 
 spring-config.xml
-```
+```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -135,7 +135,7 @@ spring-config.xml
 
 CDPlayerTest.class - 测试文件
 
-```
+```java
 package soundsystem.test;
 
 import org.junit.Rule;
@@ -175,7 +175,7 @@ public class CDPlayerTest {
 
 ## 给bean起一个不同的名称
 
-```
+```java
 @Component(value = "lonelyHeartsClub")
 public class SgtPeppers implements CompactDisc {
     // ...
@@ -197,7 +197,7 @@ public class CDPlayerConfig {
 
 除了将包设置为String之外，@ComponentScan 还提供了另一种格式，那就是将其指定为包中的类或者接口：
 
-```
+```java
 @ComponentScan(basePackageClasses = {CompactDisc.class, CDPlayer.class})
 public class CDPlayerConfig {
 }
@@ -282,7 +282,7 @@ public class CDPlayerConfig {
 **@Bean 注解会告诉Spring这个方法将会返回一个对象，该对象要注册为Spring应用上下文中的bean 。**
 
 默认情况下，bean的ID与带有@Bean注解的方法名是一样的，但是，你也可以指定一个不同的名字：
-```
+```java
 @Bean(name = "lonelyHeartsClubBand")
 public CompactDisc sgtPeppers(){
     return new SgtPeppers();
@@ -293,7 +293,7 @@ public CompactDisc sgtPeppers(){
 
 CDPlayerConfig.class - JavaConfig 类
 
-```
+```java
 @Configuration
 public class CDPlayerConfig {
     @Bean(name = "lonelyHeartsClubBand")
@@ -311,7 +311,7 @@ public class CDPlayerConfig {
 
 假设你引入了其他的CDPlayer的bean：
 
-```
+```java
 @Bean
 public CDPlayer cdPlayer(CompactDisc compactDisc){
     return new CDPlayer(sgtPeppers());
@@ -325,7 +325,7 @@ public CDPlayer anthorCDPlayer(CompactDisc compactDisc){
 **默认情况下，SPirng中的bean都是单例的**，所以，Spring会拦截对sgtPeppers()的调用并确保返回的是Sprring所创建的`bean `，在这里，bean就是Spirng在调用sgtPeppers()时所创建的`CompactDisc bean`
 
 还有另一种写法：
-```
+```java
 @Configuration
 public class CDPlayerConfig {
     @Bean(name = "lonelyHeartsClubBand")
@@ -345,7 +345,7 @@ public class CDPlayerConfig {
 ==
 
 spring-config.xml
-```java
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
