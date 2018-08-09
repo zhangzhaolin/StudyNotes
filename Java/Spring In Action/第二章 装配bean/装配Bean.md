@@ -129,10 +129,6 @@ spring-config.xml
 </beans>
 ```
 
-在这个项目中，我的分包如下图所示：
-
-![此处输入图片的描述][2]
-
 CDPlayerTest.class - 测试文件
 
 ```java
@@ -152,7 +148,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring-config.xml"})
+@ContextConfiguration(locations = {"classpath:/spring-config.xml"})
 public class CDPlayerTest {
     @Rule
     public final SystemOutRule log = new SystemOutRule().enableLog();

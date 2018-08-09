@@ -123,7 +123,7 @@ knights.xml
 public class KnightMain {
     public static void main(String []args){
         // 通过xml的方式 加载spring上下文
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("com/springinaction/knights.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/knights.xml");
         // 获取 knight bean
         Knight knight = context.getBean(Knight.class);
         knight.embarkOnQuest();
@@ -138,6 +138,10 @@ Spring通过**应用上下文（Application Context）**装配bean的定义并�
 1. 基于knights.xml创建Spring应用上下文
 2. 调用应用上下文获取一个ID为knight的bean
 3. 简单调用`embarkOnQuest()`方法执行探险任务
+
+有个书中没有提到但是需要值得注意的一点的地方是，由于我是使用maven来构建的，所以相关文件一定要放在对应的目录中，例如 ： `Knights.xml`需要放到`src/main/resources`目录中 ：
+
+![如果配置正确的话，idea会显示如下图所示的包分布结构](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-8-9/23278490.jpg)
 
 构造器注入：基于Java文件
 --
@@ -436,7 +440,7 @@ bean工厂是最简单的容器，提供基本的依赖注入支持。应用上�
 无论是从类中还是从文件系统中加载应用上下文都是类似的：
 例如，下面是从类路径中加载：
 ```
-ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("com/springinaction/knights.xml");
+ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/knights.xml");
 ```
 下面是从文件系统中加载
 ```
