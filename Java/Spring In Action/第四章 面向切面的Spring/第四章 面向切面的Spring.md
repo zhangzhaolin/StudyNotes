@@ -113,7 +113,68 @@ execution(* set*(...))
 execution(* com.xyz.service.AccountService.*(...))
 ```
 
+匹配定义在`service`包下的所有方法
+
+```java
+execution(* com.xyz.service.*.*(..))
+```
+
+匹配定义在`service`包或者子包下的所有方法
+
+```java
+execution(* com.xyz.service..*.*(..))
+```
 
 
 
+| Aspect指示器  |                     描述                     |
+| :-----------: | :------------------------------------------: |
+| `execution()` |                用于匹配连接点                |
+|    `arg()`    |          表明连接点参数类型是匹配类          |
+|   `@args()`   |             表明参数注解是匹配类             |
+|   `this()`    |  匹配一个bean，这个bean是一个指定类型的实例  |
+|   `target`    | 匹配一个目标对象，此对象是一个给定类型的实例 |
+|  `@target()`  |        匹配对象类需要有指定类型的注解        |
+|  `within()`   |           限制连接点匹配指定的类型           |
+|  `@within()`  |     匹配方法，该方法需要给定一个特定注解     |
+| `@annotation` |           匹配带有指定注解的连接点           |
 
+### 编写切点
+
+假设我们需要编写`Performance`类型 ：
+
+```java
+public interface Performance{
+    public void perform();
+}
+```
+
+我们想要编写一个切面，在调用`Performance`类中的`perform`方法时触发通知 ：
+
+```java
+execution(public * concert.Performance.perform(..))
+```
+
+
+
+![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-8-14/90244174.jpg)
+
+现在我们假设我们需要配置的切点仅仅匹配`concert`包 ：
+
+```java
+execution(public * concert.Performance.perform(..) && within(concert.*))
+```
+
+当使用Spring的XML来描述切面时候，我们可以使用`and`来替换`&&`，同样的，`or`和`not`可以替换`||`和`!`
+
+### 在切点中选择bean
+
+Spring中的`bean()`指示器允许我们在切点表达式中使用bean的ID来标识bean。`bean()`使用`bean ID`或`bean`名称作为参数来限制切点只匹配特定的`bean`
+
+例如 ：
+
+```java
+execution(* concert.Performance.perform(..) and bean('woodstock'))
+```
+
+在上面的例子中，我们希望在执行`perform()`方法时应用通知，但是限制bean的ID为`woodstock`
