@@ -12,6 +12,7 @@
 - [第一章 Spring之旅](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B8%80%E7%AB%A0%20Spring%E4%B9%8B%E6%97%85/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%20Spring%E4%B9%8B%E6%97%85.md)
 - [第二章 装配Bean](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E8%A3%85%E9%85%8Dbean/%E8%A3%85%E9%85%8DBean.md)
 - [第三章 高级装配](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B8%89%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D/%E7%AC%AC%E4%B8%89%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D.md)
+- [第四章 面向切面编程](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%9A%84Spring/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%9A%84Spring.md)
 
 ### 自己的Java学习笔记 : 
 
