@@ -178,3 +178,284 @@ execution(* concert.Performance.perform(..) and bean('woodstock'))
 ```
 
 在上面的例子中，我们希望在执行`perform()`方法时应用通知，但是限制bean的ID为`woodstock`
+
+## 使用注解创建切面
+
+### 定义切面
+
+```java
+@Aspect
+public class Audience {
+	// 演出之前
+    @Before("execution(public * concert.Performance.perform(..))")
+    public void silenceCellPhone(){
+        System.out.println("手机静音");
+    }
+	// 演出之前
+    @Before("execution(public * concert.Performance.perform(..))")
+    public void takeSeats(){
+        System.out.println("对号入座");
+    }
+	// 演出成功之后
+    @AfterReturning("execution(public * concert.Performance.perform(..)")
+    public void applause(){
+        System.out.println("掌声雷动");
+    }
+	// 演出失败之后
+    @AfterThrowing("execution(public * concert.Performance.perform(..))")
+    public void demandRefund(){
+        System.out.println("我想退款!");
+    }
+
+}
+```
+
+`Audience`类使用了`@Aspect`注解进行标注，表明该类不仅是一个POJO，**还是一个切面**。`Audience`类中的方法都是用注解来定义切面的具体行为。
+
+AspectJ使用了五个注解来定义通知 ：
+
+|       注解        |                   通知                   |
+| :---------------: | :--------------------------------------: |
+|     `@After`      | 通知方法在目标方法返回或者抛出异常时调用 |
+| `@AfterReturning` |       通知方法在目标方法返回后调用       |
+| `@AfterThrowing`  |     通知方法在目标方法抛出异常后调用     |
+|     `@Around`     |       通知方法会将目标方法封装起来       |
+|     `@Before`     |      通知方法在目标方法调用之前调用      |
+
+在上面的例子中，我们定义了四个切点表达式，这四个表达式完全可以进行整合 ： 
+
+**`PointCut`注解能够在一个`@Aspect`切面内定义可以重复的切点**
+
+```java
+@Aspect
+public class Audience {
+    @Pointcut("execution(public * concert.Performance.perform(..))")
+    public void perform(){}
+    // 演出之前
+    @Before("perform()")
+    public void silenceCellPhone(){
+        System.out.println("手机静音");
+    }
+    // 演出之前
+    @Before("perform()")
+    public void takeSeats(){
+        System.out.println("对号入座");
+    }
+    // 演出成功之后
+    @AfterReturning("perform()")
+    public void applause(){
+        System.out.println("掌声雷动");
+    }
+    // 演出失败之后
+    @AfterThrowing("perform()")
+    public void demandRefund(){
+        System.out.println("我想退款!");
+    }
+}
+
+```
+
+
+
+我们还需要启动AspectJ的自动代理 ：
+
+如果你使用JavaConfig注解的话，你可以在配置类上加上`@EnableAspectJAutoProxy`注解启动自动代理的功能
+
+```java
+// 启动AspectJ自动代理
+@EnableAspectJAutoProxy
+@Configuration
+public class ConcertConfig {
+    @Bean
+    public Audience audience(){
+        return new Audience();
+    }
+}
+```
+
+如果使用XML装配的话，我们需要`<aop:aspectj-autoproxy />`启动自动代理 ：
+
+```java
+<bean id="audience" class="concert.Audience"/>
+<bean id="musicPerformance" class="concert.MusicPerformance"/>
+<!-- 开启自动代理 -->
+<aop:aspectj-autoproxy/>
+```
+
+Spring的AspectJ自动代理仅仅使用`@Aspect`作为创建切面的指导，**切面依然是基于代理的**。在本质上，它依然是**Spring基于代理的切面**。这一点非常重要，因为这意味着尽管使用的是`@Aspect`注解，但是仍然**限于代理方法的调用**。如果想使用AspectJ的所有能力，我们必须在运行时使用AspectJ并且不依赖Spring来创建基于代理的切面。
+
+### 创建环绕通知
+
+环绕通知能够让你所编写的逻辑将被通知的目标方法（连接点）完全包裹起来。就像是在一个通知方法中同时编写前置后置通知。
+
+```java
+@Aspect
+public class Audience {
+
+    @Pointcut("execution(public * concert.Performance.perform(..))")
+    public void perform(){}
+
+    // 环绕通知
+    @Around("perform()")
+    public void watchPerformance(ProceedingJoinPoint joinPoint){
+        try{
+            System.out.println("关闭手机");
+            System.out.println("入座");
+            // 通过ProceedingJoinPoint来调用被通知的方法
+            joinPoint.proceed();
+            System.out.println("掌声雷动");
+        }catch(Throwable e){
+            System.out.println("我要退款");
+        }
+    }
+}
+```
+
+`@Around`注解表明`watchPerformance()`方法会作为`performance`切点的环绕通知。**当通知方法需要把控制权交给被通知方法时候，需要调用`ProceedingJoinPoint`的`proceed()`方法**。如果不调用这个方法的话，你的通知会阻塞对被通知方法的调用。
+
+ ### 为通知传递参数
+
+在`BlankDisc`中，我们需要统计磁道被播放的数量 ：
+
+```java
+
+public class BlankDisc implements CompactDisc {
+
+    private String title;
+    private String artist;
+    private List<String> tracks;
+    public BlankDisc(String title,String artist,List<String> tracks) {
+        this.title = title;
+        this.artist = artist;
+        this.tracks = tracks;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public String getArtist() {
+        return artist;
+    }
+    public List<String> getTracks() {
+        return tracks;
+    }
+    public void play() {
+        System.out.println("title :" + title + " artist :" + artist);
+        for (int trackNumber = 0;trackNumber < tracks.size();trackNumber ++){
+            playTrack(trackNumber);
+        }
+    }
+    public void playTrack(int trackNumber) {
+        System.out.println("track "+ trackNumber + " : " + tracks.get(trackNumber));
+    }
+}
+```
+
+我们定义`TrackCounter`来描述切面 ：
+
+```java
+@Aspect
+@Component
+@EnableAspectJAutoProxy
+public class TrackCounter {
+    public Map<Integer,Integer> trackCounts = new HashMap<Integer, Integer>();
+    @Pointcut("execution(public * soundsystem.BlankDisc.playTrack(int)) && args(trackNumber))")
+    public void trackPlayed(int trackNumber){}
+    @AfterReturning("trackPlayed(trackNumber)")
+    public void countTrack(int trackNumber){
+        trackCounts.put(trackNumber,getPlayCount(trackNumber) + 1);
+        System.out.println("--->track " + trackNumber + "数量增加了.");
+    }
+    public int getPlayCount(int trackNumber){
+        return trackCounts.containsKey(trackNumber)?
+                trackCounts.get(trackNumber):0;
+    }
+}
+```
+
+切点表达式中的`args(trackNumber)`表明 ：**传递给连接点的int类型的参数也会传递到通知方法中**。参数的名称为`trackNumber`，与切点方法签名中的参数相匹配。在`@AfterReturing("trackNumber")`表达式下面，切点方法和切点定义的参数名一致。
+
+### 通过注解引入新功能
+
+## 在XML中声明切面
+
+### 前置后置通知
+
+```xml
+<!-- 切面配置 -->
+<!-- 顶层的aop配置元素 -->    
+<aop:config>
+        <!-- 定制一个切面 -->
+        <aop:aspect ref="audience">
+			<!-- 定义一个切点 -->
+            <aop:pointcut id="perform" expression="execution(public * concert.Performance.perform(..))"/>
+
+            <aop:before method="takeSeats" pointcut-ref="perform"/>
+
+            <aop:before method="silenceCellPhone" pointcut-ref="perform"/>
+
+            <aop:after-returning method="applause" pointcut-ref="perform"/>
+
+            <aop:after-throwing method="demandRefund" pointcut-ref="perform"/>
+
+        </aop:aspect>
+    </aop:config>
+```
+
+### 环绕通知
+
+```xml
+<bean id="musicPerformance" class="concert.MusicPerformance"/>
+<bean id="audience" class="concert.Audience"/>
+<aop:config>
+	<aop:aspect ref="audience">
+ 	<aop:pointcut id="performance" expression="execution(public * concert.Performance.perform())"/>
+ 	<aop:around method="execute" pointcut-ref="performance"/>
+    	</aop:aspect>
+</aop:config>
+```
+
+### 为通知传递参数
+
+```xml
+<beans>	
+	<bean id="blankDisc" class="soundsystem.BlankDisc"
+          c:_0="${disc.title}" c:_1="${disc.artist}" c:_2-ref="blankDiscList"/>
+
+    <bean id="cdPlayer" class="soundsystem.CDPlayer"/>
+
+    <bean id="trackCounter" class="soundsystem.TrackCounter"/>
+
+    <util:list id="blankDiscList">
+        <value>老古董</value>
+        <value>大千世界</value>
+        <value>如约而至</value>
+        <value>柳成荫</value>
+    </util:list>
+
+    <context:property-placeholder location="classpath:/application.properties"/>
+
+    <aop:aspectj-autoproxy/>
+
+    <import resource="classpath:/aopconfig.xml"/>
+</beans>
+```
+
+```xml
+<beans>
+	<aop:config>
+        <aop:aspect ref="trackCounter">
+        <aop:pointcut id="playTrack" expression="execution(* soundsystem.BlankDisc.playTrack(int)) and args(trackNumber)"/>
+        <aop:after-returning pointcut-ref="playTrack" method="countTrack"/>
+        </aop:aspect>
+    </aop:config>
+</beans>
+```
+
+### 通过切面引入新的功能
+
+## 注入AspectJ切面
+
+
+
+
+
