@@ -501,7 +501,7 @@ Controller控制层中 ：
 @ResponseBody
 public JsonUtils processRegisteration(@Valid Spitter spitter, Errors error){
 	if (error.hasErrors()){
-    	return new JsonUtils(ResultEnum.SUCCESS,"","/spitter/register");
+    	return new JsonUtils(ResultEnum.ERROR,"","/spitter/register");
 	}
     spitterRepository.save(spitter);
     return new JsonUtils(ResultEnum.SUCCESS,"","/spitter/user/" + spitter.getUserName());
