@@ -297,3 +297,132 @@ var app = new Vue({
 
 ## 指令与事件
 
+🤞 **指令带有前缀`v-`**
+
+```php+HTML
+<body>
+	<div id="app">
+		<p v-if="show">show this words.</p>
+	</div>
+</body>
+<script type="text/javascript">
+	var app = new Vue({
+		el : "#app",
+		data : {
+			show : true
+		}
+	})
+</script>
+```
+
+`v-bind`的基本用途是 ：动态更新HTML元素上的属性，比如id、class等 ：
+
+```html
+<body>
+	<div id="app">
+		<img v-bind:src="imgUrl"/>
+		<p><a v-bind:href="githubUrl">大型交友网站</a></p>
+	</div>
+</body>
+<script type="text/javascript">
+	var app = new Vue({
+		el : "#app",
+		data : {
+			imgUrl : "http://www.uml.org.cn/safe/images/2018022724.jpg",
+			githubUrl : "https://github.com"
+		}
+	})
+</script>
+```
+
+`v-on` ：用来绑定事件监听器 
+
+```html
+<body>
+	<div id="app">
+		<!-- <p> {{show?"这是一段文本":""}} </p> -->
+		<p v-if="show">这是一段文本.</p>
+		<button v-on:click="handleClose">点击隐藏</button>
+	</div>
+</body>
+<script type="text/javascript">
+	var app = new Vue({
+		el : "#app",
+		data : {
+			show : true
+		},
+		methods : {
+			handleClose : function() {
+				this.show = false;
+			}
+		}
+		
+	})
+</script>
+```
+
+或者可以这样编写 ：
+
+```html
+<body>
+	<div id="app">
+		<!-- <p> {{show?"这是一段文本":""}} </p> -->
+		<p v-if="show">这是一段文本.</p>
+		<!-- <button v-on:click="handleClose">点击隐藏</button> -->
+		<button v-on:click="show = false">点击隐藏</button>
+	</div>
+</body>
+<script type="text/javascript">
+	var app = new Vue({
+		el : "#app",
+		data : {
+			show : true
+		},
+		methods : {
+			handleClose : function() {
+				this.show = false;
+			}
+		}
+		
+	})
+</script>
+```
+
+在`methods`中也可以调用方法 ：
+
+```javascript
+var app = new Vue({
+		el : "#app",
+		data : {
+			show : true
+		},
+		methods : {
+			handleClose : function() {
+				this.close();
+			},
+			close : function(){
+				this.show = false;
+			}
+		}
+		
+	});
+```
+
+## 🍨 语法糖
+
+`vue`中的`v-bind`以及`v-on`提供了语法糖 ：
+
+```html
+<!-- <img v-bind:src="imgUrl"/>
+<p><a v-bind:href="githubUrl">大型交友网站</a></p> -->
+<img :src="imgUrl">
+<p><a :href="githubUrl">大型交友网站</a></p>
+```
+
+```html
+<!-- <button v-on:click="handleClose">点击隐藏</button> -->
+<button @click="handleClose">点击隐藏</button>
+```
+
+
+
