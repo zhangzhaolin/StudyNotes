@@ -31,4 +31,5 @@
 
 - [数据绑定和第一个vue应用](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E5%92%8C%E7%AC%AC%E4%B8%80%E4%B8%AAVue%E5%BA%94%E7%94%A8.md)
 - [计算属性](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7.md)
+- [v-bind及class与style绑定](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/v-bind%E5%8F%8Aclass%E4%B8%8Estyle%E7%BB%91%E5%AE%9A.md)
 
