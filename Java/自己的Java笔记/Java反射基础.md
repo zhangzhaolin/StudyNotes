@@ -501,3 +501,7 @@ public class Thread implements Runable{
 
 # 3. Java反射机制
 
+`Class`反射对象 ：描述类语义结构，可以从Class对象中获取构造函数、成员变量、方法类等类元素的反射对象。
+
+- `Constructor`：根据`getConstructors()`方法可以获取类的所有构造函数反射对象数组。还可以通过`getConstructor(Class<?>... parameterTypes)`方法获取特定参数的构造函数反射对象。
+- `Method`：
