@@ -251,5 +251,55 @@ vm.selected.number // => 123
 
 ## 修饰符
 
+### `.lazy`
+
+在输入框中，`v-model`默认是在`input`事件中同步输入框的数据。使用`.lazy`修饰符可以转变为在`change`事件中同步，如 ：
+
+```html
+<div id="app" class="ui raised segment">
+    <h3>.lazy [失去焦点时同步]</h3>
+    <div class="ui input">
+        <input v-model.lazy="message"/>
+        <label></label>
+    </div>
+    <p>{{message}}</p>
+</div>
+<script>
+	var app = new Vue({
+        el : "#app",
+        data : {
+            message : ""
+        }
+    })
+</script>
+```
+
+当输入框失去焦点或者按下回车的时候才会更新。
+
+### `.number`
+
+使用修饰符可以将输入的数字转换为Number类型，否则即便你输入的是数字，但是仍然是String类型：
+
+```html
+<div id="app1" class="ui raised segment">
+    <h3>.number [将输入的数字转换为number类型]</h3>
+    <div class="ui input">
+        <input v-model.number="message"/>
+        <label></label>
+    </div>
+    <p>{{typeof message}}</p>
+</div>
+<script>
+    var app = new Vue({
+        el : "#app1",
+        data : {
+            message : 123
+        }
+    })
+</script>
+```
+
+
+
 
 
