@@ -52,6 +52,8 @@ var app = new Vue({
 })
 ```
 
+> 除了数据属性，`Vue` 实例还暴露了一些有用的实例属性与方法。它们都有前缀 `$`，以便与用户定义的属性区分开来。
+
 `VUE`数据绑定默认为 **双向数据绑定**：
 
 ```javascript
@@ -67,6 +69,28 @@ app.a = 7;
 console.log(myData.a);	// 7
 myData.a = 3;
 console.log(app.a);		// 3
+```
+
+但是例外是 —— **使用[`Object.freeze`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)会阻止修改现有的属性** :
+
+```html
+<body>
+    <div id="app">
+        <p>{{foo}}</p>
+        <button @click="foo = 'baz'"> 修改 </button>
+    </div>
+</body>
+<script src="../vue/vue.js"></script>
+<script>
+    var obj = {
+        foo: "bar"
+    };
+    Object.freeze(obj);
+    var app = new Vue({
+        el: "#app",
+        data: obj
+    });
+</script>
 ```
 
 ## 生命周期

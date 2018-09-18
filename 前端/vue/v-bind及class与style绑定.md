@@ -22,7 +22,11 @@
 </script>
 ```
 
-类名active依赖于数据`isActive`，当其为true时，div会拥有类名active，当其为false时候则没有，下面是在谷歌浏览器中的验证 ：
+类名active依赖于数据`isActive`，当其为true时，div会拥有类名active，当其为false时候则没有。
+
+> 这个 class 存在与否将取决于数据属性 `isActive` 的 [truthiness](https://developer.mozilla.org/zh-CN/docs/Glossary/Truthy)，而不仅仅是true的时候才会被显示。
+
+下面是在谷歌浏览器中的验证 ：
 
 ```html
 > app.isActive = false
