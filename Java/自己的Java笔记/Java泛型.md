@@ -12,7 +12,7 @@
 
 `ArrayList`大概是一个非常常见的一个泛型类了，在代码中指定其传入的类型为`<String>`类型，所以只能添加`String`类型的数据，而如果添加其他类型的数据则会报错。
 
-![1538190250627](C:\Users\zhang\AppData\Roaming\Typora\typora-user-images\1538190250627.png)
+![1538190250627](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-9-30/91917915.jpg)
 
 在这里，`ArrayList`类有一个**类型参数**用来指定元素的类型 ：
 
@@ -170,7 +170,66 @@ public class FruitGenerator implements Generator<String>{
 
 ## Java泛型擦除及相关内容
 
-先看下面的例子 ：
+**虚拟机中不存在泛型，只有普通的类和方法；所有的类型参数都会用它们的限定类型替换，如果没有限定类型替换，那么就用`Object`**，例如 ：
+
+```java
+public class Pair<T>{
+
+    private T first;
+    private T second;
+
+    public Pair(){
+        first = null;
+        second = null;
+    }
+
+    public Pair(T first, T second) {
+        this.first = first;
+        this.second = second;
+    }
+
+    public T getFirst() {
+        return first;
+    }
+
+    public void setFirst(T first) {
+        this.first = first;
+    }
+
+    public T getSecond() {
+        return second;
+    }
+
+    public void setSecond(T second) {
+        this.second = second;
+    }
+
+
+}
+```
+
+这个类的字节码如下所示 ：
+
+```java
+public class Pair {
+  private Ljava/lang/Object; first
+  private Ljava/lang/Object; second
+  public <init>()V
+   // ....
+  public <init>(Ljava/lang/Object;Ljava/lang/Object;)V
+   // ....
+  public getFirst()Ljava/lang/Object;
+   // ....
+  public setFirst(Ljava/lang/Object;)V
+   // ....
+  public getSecond()Ljava/lang/Object;
+   // ....
+  public setSecond(Ljava/lang/Object;)V
+   // ....
+}
+```
+
+另外一个例子 ——
 
 ```java
 Class clazz1 = new ArrayList<String>().getClass();
@@ -241,74 +300,145 @@ interface HasF{
 
 `extends`关键字后后面的类型信息决定了泛型类型能够保留的信息。Java类型擦除只能擦除到`HasF`类型 。
 
-### Java泛型擦除缺陷及补救措施
+## 🐲 Java泛型约束和局限性
 
-泛型类型不可以显式的运用在运行时类型的操作当中。例如：转型、`instanceof`和`new`，因为在运行时，所有参数的类型信息都丢失了，类似如下代码是无法通过编译的 ：
+### 不能使用基本类型实例化类型参数
+
+以`Pair`类为例子 ：
 
 ```java
-public class Erased<T> {
-    private static final int SIZE = 100;
-    public static void f(Object arg){
-        // ! if(arg instanceof T){}
-        // ! T var = new T();
-        // ! T[] array = new T[SIZE];
-        // ! T[] array = (T)new Object[SIZE];
+public class Pair<T> {
+    private T first;
+    private T second;
+    public Pair(){
+        first = null;
+        second = null;
+    }
+    public Pair(T first, T second) {
+        this.first = first;
+        this.second = second;
+    }
+    public T getFirst() {
+        return first;
+    }
+    public void setFirst(T first) {
+        this.first = first;
+    }
+    public T getSecond() {
+        return second;
+    }
+    public void setSecond(T second) {
+        this.second = second;
     }
 }
 ```
 
-### 类型判断问题
-
-我们可以使用如下代码解决泛型的类型信息由于擦除无法判断问题 ：
+在实例化此类的时候，需要这样写 ：
 
 ```java
-public class GenericType<T> {
-    Class<?> classType;
-    public GenericType(Class<?> type){
-        classType = type;
-    }
-    public boolean isInstance(Object object){
-        return classType.isInstance(object);
-    }
-    public static void main(String[] args) {
-        GenericType<A> generator = new GenericType<>(A.class);
-        System.out.println(generator.isInstance(new A()));
-        System.out.println(generator.isInstance(new B()));
-    }
-}
-class A{}
-class B{}
+Pair<Double> pair = new Pair<>(); // OK
+Pair<double> pair = new Pair<>(); // ERROR
 ```
 
-### 创建类型实例
+不能使用`Pair<double>`的直接原因是因为类型擦除，擦除之后，`Pair`类中含有`Object`类型的域，而`Object`不能转换为`double`类型。（或者任何其他基本类型数据）
 
-泛型中不能使用`new T`的原因有两个，第一个是不知道`T`的类型；第二是因为不知道`T`是否包含无参构造函数，我们可以使用显示的工厂模式 ：
+### 运行时类型查询只适用于原始类型
+
+首先，解释下什么是原始类型 —— 原始类型就是在删除类型参数（擦除）之后的泛型类型名。一般是限定类型，如果没有限定类型，那么就是`Object`。例如 ：`Pair<T>`的原始类型就是`Object`，而`Interval<T extends Comparable>`的原始类型为`Comparable`。
+
+以下代码均不允许运行 ：
 
 ```java
-public class Main {
-    public static void main(String[] args) {
-        Creater<Integer> creater = new Creater<>();
-        System.out.println(creater.newInstance(new IntegerFactory()));
-    }
-}
-interface Factory<T>{
-    T create();
-}
-class Creater<T>{
-    T instance;
-    public <F extends Factory<T>> T newInstance(F f){
-        instance = f.create();
-        return instance;
-    }
+if (a instanceof Pair<Stirng>){...} //ERROR
+if (a instanceof Pair<T>){...	}
+```
 
-}
-class IntegerFactory implements Factory<Integer>{
-    @Override
-    public Integer create() {
-        return 9;
-    }
+`getClass`方法总是返回原始类型 ：
+
+```java
+Pair<Double> pair = new Pair<>();
+Pair<String> str = new Pair<>();
+System.out.println(str.getClass() == pair.getClass()); // true
+```
+
+因为两次调用的`getClass()`都将会返回`Pair.class`
+
+### 不能创建参数化类型的数组
+
+例如 ：
+
+```java
+Pair<String>[] table = new Pair<String>[10]; //!!ERROR
+```
+
+假设编译没有出现错误，那么虚拟机会擦除泛型 ：
+
+```java
+Pair<Object>[] table = new Pair<Object>[10];
+```
+
+那么，下面赋值 ：
+
+```java
+table[0] = new Pair<Integer>();
+```
+
+就能够通过数组存储检查了，但是如果读取的时候，会提示类型转换错误。
+
+🍭 但是可以声明通配类型的数组 ：
+
+```java
+// 不安全但是IDE没有报错
+Pair<String>[] pairs = (Pair<String>[]) new Pair<?>[10];
+Object[] objects = pairs;
+objects[0] = new Pair<>(1,2);
+System.out.println(pairs[0].getFirst());
+```
+
+以上代码编译器不会报错，但是运行时会出现错误。
+
+### `Varargs`警告
+
+考虑下面一个简单的方法，这个方法的参数个数是可变的 ：
+
+```java
+public final <T> void display(T... products){
+    System.out.println(Arrays.toString(products));
 }
 ```
+
+为了调用这个方法，虚拟机内部必须创建一个泛型类型数组，但是，对于这种情况，**只会得到一个警告**
+
+可以使用两种方式消除这种警告 ：
+
+第一种 ——
+
+```java
+@SafeVarargs
+public final <T> void display(T... products){
+    System.out.println(Arrays.toString(products));
+}
+```
+
+第二种 ——
+
+```java
+@SuppressWarnings("unchecked")
+public static void main(String[] args) {
+    // .....
+    var.display(list);
+}
+```
+
+### 不能实例化类型变量
+
+例如，下面的构造器是非法的 ：
+
+```java
+public Pair(){this.first = new T();this.second = new T();} //ERROR
+```
+
+
 
 ## Java泛型的通配符
 
@@ -345,7 +475,7 @@ Plant<Fruit> plant = new Plant<Apple>(new Apple());
 
 但是，上面的代码会无法编译 ：
 
-![1538206459450](C:\Users\zhang\AppData\Roaming\Typora\typora-user-images\1538206459450.png)
+![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-9-30/99967816.jpg)
 
 从图片可知，就算容器中的类型之间存在继承关系，但是`Plate`和`Plate`两个容器之间是不存在继承关系的，Java可以设计成`<? extends T>`让两个容器之间存在继承关系 ：
 
@@ -369,7 +499,7 @@ class GreenApple extends Apple {}
 
 `Plate<? extends Fruit>`覆盖下面红框中的部分 ：
 
-![1538207510165](C:\Users\zhang\AppData\Roaming\Typora\typora-user-images\1538207510165.png)
+![1538207510165](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-9-30/50021287.jpg)
 
 但是如果我们想要向盘子里添加数据，例如 ：
 
@@ -411,11 +541,11 @@ System.out.println(fruit);
 
 `Plate<? super Fruit>`覆盖红色框部分 ：
 
-![1538209506061](C:\Users\zhang\AppData\Roaming\Typora\typora-user-images\1538209506061.png)
+![1538209506061](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-9-30/79818120.jpg)
 
 下图代码就会编译出错 ：
 
-![1538210584784](C:\Users\zhang\AppData\Roaming\Typora\typora-user-images\1538210584784.png)
+![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-9-30/69673043.jpg)
 
 因为`Apple`是`Fruit`的子类。
 
@@ -444,7 +574,153 @@ plate.setItem(new Banana());
 
 ### `<?>`无限通配符
 
+## 其他
 
+### 桥方法
+
+假设有这样一个类 ：
+
+```java
+public class Pair<T> {
+    private T first;
+    private T second;
+    public Pair(){
+        first = null;
+        second = null;
+    }
+    public Pair(T first, T second) {
+        this.first = first;
+        this.second = second;
+    }
+    public T getFirst() {
+        return first;
+    }
+    public void setFirst(T first) {
+        this.first = first;
+    }
+    public T getSecond() {
+        return second;
+    }
+    public void setSecond(T second) {
+        this.second = second;
+    }
+}
+```
+
+还有它的一个子类 ：
+
+```java
+class DateInterval extends Pair<LocalDate>{
+    @Override
+    public void setSecond(LocalDate second) {
+        if (second.compareTo(getFirst()) > 0){
+            super.setSecond(second);
+        }
+    }
+}
+```
+
+我们知道，虚拟机在运行期间会擦除类型参数，会替换为他们的限定类型；如果没有限定类型，那么就用`Object`：
+
+那么，`Pair<T>`在虚拟机中是如下所示的 ：
+
+```java
+public class Pair{
+
+    private Object first;
+    private Object second;
+
+    public Pair(){
+        first = null;
+        second = null;
+    }
+
+    public Pair(Object first, Object second) {
+        this.first = first;
+        this.second = second;
+    }
+
+    public Object getFirst() {
+        return first;
+    }
+
+    public void setFirst(Object first) {
+        this.first = first;
+    }
+
+    public Object getSecond() {
+        return second;
+    }
+
+    public void setSecond(Object second) {
+        this.second = second;
+    }
+}
+```
+
+`DateInterval`泛型擦除之后如下所示 ：
+
+```java
+class DateInterval extends Pair{
+    @Override
+    public void setSecond(LocalDate second) {
+        if (second.compareTo(getFirst()) > 0){
+            super.setSecond(second);
+        }
+    }
+}
+```
+
+但是，`Pair`中的`setSecond`的方法显然是这样的 ：
+
+```java
+public void setSecond(Object second){}
+```
+
+类型擦除和`@Override`之间发生了冲突，要解决这个问题，编译器在`DateInterval`中生成了一个 **桥方法** ：
+
+```java
+public void setSecond(Object second){
+    setSecond((LocalDate)setSecond);
+}
+```
+
+字节码如下所示 ：
+
+```java
+public synthetic bridge setSecond(Ljava/lang/Object;)V
+   L0
+    LINENUMBER 35 L0
+    ALOAD 0
+    ALOAD 1
+    CHECKCAST java/time/LocalDate
+    INVOKEVIRTUAL DateInterval.setSecond (Ljava/time/LocalDate;)V
+    RETURN
+   L1
+    LOCALVARIABLE this LDateInterval; L0 L1 0
+    MAXSTACK = 2
+    MAXLOCALS = 2
+```
+
+假设在`DateInterval`中覆盖了`getSecond()`方法 ：
+
+```java
+@Override
+public LocalDate getSecond() {
+    return super.getSecond();
+}
+```
+
+那么在`DateInterval`中就有两个`getSecond`方法了 ：
+
+```java
+LocalDate getSecond();
+Object getSecond();
+```
+
+在Java中，这样编写代码是不合法的；但是在虚拟机中，用参数类型和返回类型确定一个方法 。
+
+总之，桥方法被合成来保持多态。
 
 ## 参考及引用
 
