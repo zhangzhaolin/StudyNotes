@@ -97,7 +97,7 @@ setColor.invoke(car,"red");
 
   `ClassLoader`的子类，负责装载JRE扩展目录`ext/`中的`jar`包和`class`文件，还可以加载`-D java.ext.dirs`指定目录
 
-- `AppClassLoader` ——应用类装载器
+- `AppClassLoader` —— 应用类装载器，也称为系统类加载器
 
   `ClassLoader`的子类，负责装载`classpath`路径下的类包
 
@@ -116,7 +116,7 @@ System.out.println(loader.getParent().getParent());
 
 🎯 父加载器不是父类 ：
 
-![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-9-10/85346097.jpg)
+![](https://image-static.segmentfault.com/304/490/3044905141-5a97a939b9217_articlex)
 
 
 
@@ -221,6 +221,7 @@ public class Launcher{
         // Create the extension class loader
         ClassLoader extcl;
         try {
+            // 加载扩展类加载器
             extcl = ExtClassLoader.getExtClassLoader();
         } catch (IOException e) {
             throw new InternalError(
@@ -229,6 +230,7 @@ public class Launcher{
 
         // Now create the class loader to use to launch the application
         try {
+            // 加载应用类加载器
             loader = AppClassLoader.getAppClassLoader(extcl);
         } catch (IOException e) {
             throw new InternalError(
@@ -250,8 +252,8 @@ public class Launcher{
 通过代码我们可以得知 ：
 
 1. `Launcher`初始化了`ExtClassLoader`和`AppClassLoader`
-
-2. `Launcher`中并没有看到`BootstrapClassLoader`，但是通过`System.getProperty("sun.boot.class.path")`得到了字符串`bootClassPath`，这个应该就是`BootstrapClassLoader`加载的jar包路径
+2. `Launcher`将`AppClassLoader`设置为线程上下文类加载器
+3. `Launcher`中并没有看到`BootstrapClassLoader`，但是通过`System.getProperty("sun.boot.class.path")`得到了字符串`bootClassPath`，这个应该就是`BootstrapClassLoader`加载的jar包路径
 
 我们通过代码测试一下`sun.boot.class.path`中的内容 ：
 
@@ -345,7 +347,7 @@ static class AppClassLoader extends URLClassLoader {
 4. 如果`BootstrapClassLoader`没有查找成功，则`ExtClassLoader`自己在`java.ext.dirs`路径中去查找，查找成功就返回，查找不成功再让子加载器找
 5. 如果`ExtClassLoader`查找不成功，`AppClassLoader`就自己就在`java.class.path`路径下去寻找，找到就返回，如果没有找到就让子加载器去找，如果没有子加载器的话就抛出各种异常
 
-![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-9-11/65095495.jpg)
+![](https://image-static.segmentfault.com/382/677/3826778991-5a97ace869ede_articlex)
 
 ## 2.6 `ClassLoader`重要方法
 
@@ -499,9 +501,8 @@ public class Thread implements Runable{
 }
 ```
 
-# 3. Java反射机制
+# 3. 引用
 
-`Class`反射对象 ：描述类语义结构，可以从Class对象中获取构造函数、成员变量、方法类等类元素的反射对象。
+- [深入理解JVM之ClassLoader](https://segmentfault.com/a/1190000013469223)
 
-- `Constructor`：根据`getConstructors()`方法可以获取类的所有构造函数反射对象数组。还可以通过`getConstructor(Class<?>... parameterTypes)`方法获取特定参数的构造函数反射对象。
-- `Method`：
+
