@@ -438,7 +438,128 @@ public static void main(String[] args) {
 public Pair(){this.first = new T();this.second = new T();} //ERROR
 ```
 
+有两种解决方法 ：
 
+第一种有一个前提，JDK8+，让调用者提供一个**构造器表达式** ：
+
+```java
+Pair<String> pair = Pair.makePair(String::new);
+```
+
+```java
+public static <T> Pair<T> makePair(Supplier<T> constr){
+    return new Pair<T>(constr.get(),constr.get());
+}
+```
+
+其中，`makePair`方法接受一个`Supplier<T>`，这是一个函数式接口，表示一个无参数而且返回类型为`T`的函数
+
+第二种是比较传统的方式 ：
+
+```java
+public static <T> Pair<T> makePair(Class<T> clazz){
+    try {
+        return new Pair<T>(clazz.newInstance(),clazz.newInstance());
+    } catch (InstantiationException | IllegalAccessException e) {
+        e.printStackTrace();
+        return null;
+    }
+}
+```
+
+然后如下调用 ：
+
+```java
+Pair<String> pair = Pair.makePair(String.class);
+```
+
+### 不能构造泛型数组
+
+就像不能构造泛型实例一样，也不能构造泛型数组 ：
+
+```java
+public static <T extends Comparable> T[] minmax(T... a){T[]mm = new T[2];} // ERROR
+```
+
+如果数组仅仅作为一个类的私有实例域，就可以将这个数组声明为`Object[]`，并在获取元素的时候进行类型转换，例如`ArrayList`类 ：
+
+```java
+public class ArrayList{
+    transient Object[] elementData; // non-private to simplify nested class access
+    // ...
+    @SuppressWarnings("unchecked")
+    E elementData(int index) {
+        return (E) elementData[index];
+    }
+}
+```
+
+如果数组是某个方法的临时变量 ：就可以用两种方式 ——
+
+第一种同样需要JDK8+版本 ：
+
+```java
+public static <T extends Comparable> T[] minmax(IntFunction<T[]> constr,T... a){
+    T[] mm = constr.apply(2);
+    // ...
+}
+```
+
+```java
+String[] ss = ArrayAlg.minmax(String[]::new,"Tom","Smith","Harry");
+```
+
+另外比较老的方式是利用反射机制 ：
+
+```java
+public static <T extends Comparable> T[] minmax(Class<T[]> clazz,T... a){
+    T[] mm = Array.newInstance(clazz,2);
+    // ...
+}
+```
+
+### 不能在静态域或方法中引用类型变量
+
+### 不能抛出或捕获泛型类的实例
+
+既不能抛出也不能捕获泛型类对象，甚至泛型类不能够扩展`Throwable`：
+
+```java
+public class Problem<T> extends Throwable{...} ///ERROR
+```
+
+在`catch`子句中不能使用类型变量 ：
+
+```java
+catch(T t){...}	//ERROR
+```
+
+但是，在异常规范中使用类型变量是允许的 ：
+
+```java
+public static <T extends Throwable> void work() throws T{
+    try {
+        // ... somework
+    }catch (Throwable t){
+        throw t;
+    }
+}
+```
+
+### 注意擦除后的冲突
+
+当泛型类型被擦除后，无法创建引发冲突的方法 ：
+
+```java
+public class Pair<T>{
+    // !!!ERROR
+    public boolean equals(T value){
+        // ...
+    }
+}
+```
+
+因为和`Object.equals()`引发冲突了
 
 ## Java泛型的通配符
 
@@ -573,6 +694,17 @@ plate.setItem(new Banana());
 - 下界`<? super T>`不影响向内存储，但是向外取的时候只能放`Object`对象，适合经常向里面插入数据的场景
 
 ### `<?>`无限通配符
+
+`Pair<?>`类型有以下方法 ：
+
+```java
+? getFirst();
+void setFirst(? first);
+```
+
+其中，`getFirst`的返回值只能赋值给`Object`，而`setFirst`方法不能被调用，甚至不能用`Object`调用 。
+
+`Pair<?>`和`Pair`的本质区别在于 —— `Pair`可以用任意`Object`对象调用`setObject`方法 。
 
 ## 其他
 
