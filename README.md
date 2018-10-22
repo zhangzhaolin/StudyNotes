@@ -19,10 +19,11 @@
 - [第七章 SpringMVC高级技术](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B8%83%E7%AB%A0%20SpringMVC%E7%9A%84%E9%AB%98%E7%BA%A7%E6%8A%80%E6%9C%AF/%E7%AC%AC%E4%B8%83%E7%AB%A0%20SpringMVC%E9%AB%98%E7%BA%A7%E6%8A%80%E6%9C%AF.md)
 - [第九章 保护web应用](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B9%9D%E7%AB%A0%20%E4%BF%9D%E6%8A%A4WEB%E5%BA%94%E7%94%A8/%E7%AC%AC%E4%B9%9D%E7%AB%A0%20%E4%BF%9D%E6%8A%A4web%E5%BA%94%E7%94%A8.md)
 
-### 自己的Java学习笔记 : 
+### 自己的Java学习笔记
 
 - [HashMap的put和get函数](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94put%E5%92%8Cget%EF%BC%88%E6%80%BB%EF%BC%89.md)
 - [序列化和反序列化](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.md)
+- [Java泛型](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Java%E6%B3%9B%E5%9E%8B.md)
 - 为什么说HashMap是不安全的(即将开坑...)
 
 ## 前端
@@ -34,3 +35,5 @@
 - [第四章 v-bind及class与style绑定](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/v-bind%E5%8F%8Aclass%E4%B8%8Estyle%E7%BB%91%E5%AE%9A.md)
 - [第五章 内存指令](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/%E5%86%85%E7%BD%AE%E6%8C%87%E4%BB%A4.md)
 - [第六章 表单与v-model](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/%E8%A1%A8%E5%8D%95%E4%B8%8Ev-model.md)
+- [第七章 组件](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/%E7%AC%AC%E4%B8%83%E7%AB%A0%20%E7%BB%84%E4%BB%B6.md)
+- [第八章 自定义指令](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4.md)
