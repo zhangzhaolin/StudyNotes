@@ -7,6 +7,7 @@
 - Java泛型接口
 - Java泛型擦除及其他相关内容
 - Java泛型通配符
+- 其他内容
 
 ## Java泛型类
 
@@ -279,7 +280,7 @@ class Particle<POSITION,MOMENTUM>{}
 
 我们想要获取运行时类的类型参数，但是我们看到运行结果都是「形参」。**在运行期间我们获取不到任何已经声明的类型信息**
 
-<span style="color:red">注意 ：编译器虽然会在编译过程中移除参数的类型信息，但是会保证类或方法内部参数类型的一致性</span>
+<span style="color:red;font-weight:bold">注意 ：编译器虽然会在编译过程中移除参数的类型信息，但是会保证类或方法内部参数类型的一致性</span>
 
 泛型参数将会被擦除到它的第一个边界（边界可以有多个，重用`extends`关键字，通过它可以给参数类型添加一个边界）。编译器实际上会把类型参数替换为他的第一个边界的类型。如果没有指定参数，那么类型参数将会被擦除到`Object`。下面例子中，可以把泛型参数`T`当成`HasF`使用 ：
 
@@ -368,6 +369,11 @@ System.out.println(str.getClass() == pair.getClass()); // true
 例如 ：
 
 ```java
+// OK
+Pair []pairs = new Pair[10];
+pairs[0] = new Pair<String>("1","2");
+pairs[1] = new Pair<Integer>(1,2);
+// ERROR
 Pair<String>[] table = new Pair<String>[10]; //!!ERROR
 ```
 
@@ -388,14 +394,21 @@ table[0] = new Pair<Integer>();
 🍭 但是可以声明通配类型的数组 ：
 
 ```java
-// 不安全但是IDE没有报错
 Pair<String>[] pairs = (Pair<String>[]) new Pair<?>[10];
+// 或者这样写
+Pair<String>[] tables = (Pair<String>[]) new Pair[10];
 Object[] objects = pairs;
-objects[0] = new Pair<>(1,2);
+tables[0] = new Pair<>("1","2");
+tables[1] = new Pair<>(1,2);
 System.out.println(pairs[0].getFirst());
+System.out.println(pairs[1].getFirst()); // ERROR
 ```
 
 以上代码编译器不会报错，但是运行时会出现错误。
+
+```
+Exception in thread "main" java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String
+```
 
 ### `Varargs`警告
 
@@ -411,22 +424,28 @@ public final <T> void display(T... products){
 
 可以使用两种方式消除这种警告 ：
 
-第一种 ——
+第一种 —— 在方法上使用`@SafeVarargs`
 
 ```java
-@SafeVarargs
-public final <T> void display(T... products){
-    System.out.println(Arrays.toString(products));
+public class Pair<T>{
+    private T first = null;
+    private T second = null;
+    @SafeVarargs
+    public final <T> void display(T... products){
+        System.out.println(Arrays.toString(products));
+    }
+    // ...
 }
 ```
 
-第二种 ——
+第二种 —— 在调用处使用`@SuppressWaring("unchecked")`
 
 ```java
 @SuppressWarnings("unchecked")
 public static void main(String[] args) {
-    // .....
-    var.display(list);
+    ArrayList<String> arrayList = new ArrayList<>(Arrays.asList("1", "2"));
+    Pair<ArrayList> pair = new Pair<>();
+    pair.display(arrayList);
 }
 ```
 
@@ -484,8 +503,9 @@ public static <T extends Comparable> T[] minmax(T... a){T[]mm = new T[2];} // ER
 如果数组仅仅作为一个类的私有实例域，就可以将这个数组声明为`Object[]`，并在获取元素的时候进行类型转换，例如`ArrayList`类 ：
 
 ```java
-public class ArrayList{
-    transient Object[] elementData; // non-private to simplify nested class access
+public class ArrayList<E>{
+    
+    transient E[] elementData; // non-private to simplify nested class access
     // ...
     @SuppressWarnings("unchecked")
     E elementData(int index) {
@@ -500,7 +520,7 @@ public class ArrayList{
 
 ```java
 public static <T extends Comparable> T[] minmax(IntFunction<T[]> constr,T... a){
-    T[] mm = constr.apply(2);
+    T[] mm = constr.apply(4);
     // ...
 }
 ```
@@ -519,6 +539,18 @@ public static <T extends Comparable> T[] minmax(Class<T[]> clazz,T... a){
 ```
 
 ### 不能在静态域或方法中引用类型变量
+
+```java
+public class Singleton<T> {
+
+    // ! private static T singletonInstance;
+
+    // ! public static T getSingletonInstance(){
+    // !     return this.singletonInstance;
+    // ! } 
+
+}
+```
 
 ### 不能抛出或捕获泛型类的实例
 
@@ -560,6 +592,28 @@ public class Pair<T>{
 ```
 
 因为和`Object.equals()`引发冲突了
+
+### 📌其他原则
+
+要想支持擦除的转换，就需要强行限制**一个类或者类型变量不能同时成为两个接口类型的子类，而这两个接口是同一接口的不同参数化**，例如 ：
+
+```java
+class Employee implements Comparable<Employee>{...}
+class Manager extends Employee implements Comparable<Manager>
+{...}	// ERROR
+```
+
+`Manager`会实现`Comparable<Employee>`以及`Comparable<Manager>`，这是同一个接口的不同参数化。
+
+原因是可能与合成的桥方法产生了冲突，实现了`Comparable<E>`的类可以获得一个桥方法 ：
+
+```java
+public int compareTo(Object other){
+    return compareTo((E)other);
+}
+```
+
+对于不同类型的`E`不能有两个这样的方法。
 
 ## Java泛型的通配符
 
