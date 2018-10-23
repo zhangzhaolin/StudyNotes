@@ -61,12 +61,17 @@ MyLambdaInterface lambda = (s) -> System.out.println(s);
 
 由于Lambda可以直接赋值给一个变量，我们就可以直接把Lambda作为参数给函数 ：
 
+<<<<<<< HEAD
 ![Lambda表达式作为参数](https://raw.githubusercontent.com/zhangzhaolin/StudyNotes/master/%E6%88%AA%E5%9B%BE/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0.png)
+=======
+![Lambda表达式作为参数](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E6%88%AA%E5%9B%BE/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0.png)
+>>>>>>> bc94fa843a12e0640cc79bd33b8aa201fbf6f3af
 
 ## 常见的函数式接口
 
 ### `Predicate`
 
+<<<<<<< HEAD
 ```java
 Predicate<String> predicate = s -> s.length() > 0;
 System.out.println(predicate.test("Hello World"));// true
@@ -137,6 +142,79 @@ List<Person> persons = Arrays.asList(
 );
 ```
 
+=======
+```java
+Predicate<String> predicate = s -> s.length() > 0;
+System.out.println(predicate.test("Hello World"));// true
+System.out.println(predicate.negate().test("Hello World"));// false
+Predicate<Boolean> notNull = Objects::nonNull;
+Predicate<Boolean> isNull = Objects::isNull;
+System.out.println(notNull.test(null));// false
+System.out.println(isNull.test(null));// true
+Predicate<String> isEmpty = String::isEmpty;
+Predicate<String> notEmpty = isEmpty.negate();
+System.out.println(isEmpty.test("")); // true
+System.out.println(notEmpty.test("")); // false
+```
+
+### `Function`
+
+```java
+@FunctionalInterface
+public interface Function<T, R> {
+    R apply(T t);
+    // ...
+}
+```
+
+```java
+Function<Integer,Integer> toInteger = e -> {return e+5;};
+toInteger = toInteger.andThen(e->{return e*10;});
+System.out.println(toInteger.apply(5)); // 100
+```
+
+### `Consumer`
+
+```java
+@FunctionalInterface
+public interface Consumer<T> {
+    void accept(T t);
+}
+
+```
+
+```java
+Consumer<String> shit = (s -> System.out.println("String length = " + s.length()));
+shit.accept("test"); // String length = 4
+```
+
+与`Function`的区别就是 ，`Consumer`无返回值，`Function`有返回值 。
+
+## 与函数式接口结合
+
+直接看一个实例，假设`Person`的定义和`List<Person>`的值都给定 ：
+
+```java
+@AllArgsConstructor
+public class Person {
+    @Getter
+    private String firstName;
+    @Getter
+    private String lastName;
+    @Getter
+    private int age;
+}
+```
+
+```java
+List<Person> persons = Arrays.asList(
+        new Person("Yixing","Zhao",25),
+        new Person("Yanggui","Li",30),
+        new Person("Chao","Ma",29)
+);
+```
+
+>>>>>>> bc94fa843a12e0640cc79bd33b8aa201fbf6f3af
 有这样一个需求，需要打印出所有`lastName`以`Z`开头的人的`firstName`。
 
 **原生态Lambda写法**：
