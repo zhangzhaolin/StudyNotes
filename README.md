@@ -25,6 +25,7 @@
 - [序列化和反序列化](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.md)
 - [Java泛型](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Java%E6%B3%9B%E5%9E%8B.md)
 - [`try-with-resources`语句](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/try-with-resources%20%E8%AF%AD%E5%8F%A5.md)
+- [Lambda简记](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%AE%80%E8%AE%B0.md)
 - 为什么说HashMap是不安全的(即将开坑...)
 
 ## 前端
