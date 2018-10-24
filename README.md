@@ -19,6 +19,12 @@
 - [第七章 SpringMVC高级技术](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B8%83%E7%AB%A0%20SpringMVC%E7%9A%84%E9%AB%98%E7%BA%A7%E6%8A%80%E6%9C%AF/%E7%AC%AC%E4%B8%83%E7%AB%A0%20SpringMVC%E9%AB%98%E7%BA%A7%E6%8A%80%E6%9C%AF.md)
 - [第九章 保护web应用](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B9%9D%E7%AB%A0%20%E4%BF%9D%E6%8A%A4WEB%E5%BA%94%E7%94%A8/%E7%AC%AC%E4%B9%9D%E7%AB%A0%20%E4%BF%9D%E6%8A%A4web%E5%BA%94%E7%94%A8.md)
 
+### Java8实战
+
+- [第一章 为什么要关心Java8](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%85%B3%E5%BF%83Java8.md)
+- [第二章 通过行为参数化传递代码](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E9%80%9A%E8%BF%87%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96%E4%BC%A0%E9%80%92%E4%BB%A3%E7%A0%81.md)
+- 未完待续 ……
+
 ### 自己的Java学习笔记
 
 - [HashMap的put和get函数](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94put%E5%92%8Cget%EF%BC%88%E6%80%BB%EF%BC%89.md)
