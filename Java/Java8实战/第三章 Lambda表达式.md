@@ -8,3 +8,7 @@
 
 ![](https://raw.githubusercontent.com/zhangzhaolin/StudyNotes/master/%E6%88%AA%E5%9B%BE/Java8%E5%AE%9E%E6%88%98/Character3/1.png)
 
+在JDK8出现之前和之后代码看起来更加清晰 ：
+
+![](https://raw.githubusercontent.com/zhangzhaolin/StudyNotes/master/%E6%88%AA%E5%9B%BE/Java8%E5%AE%9E%E6%88%98/Character3/2.png)
+
