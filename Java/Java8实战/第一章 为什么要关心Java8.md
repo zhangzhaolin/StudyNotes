@@ -1,5 +1,13 @@
 # 第一章 为什么要关心Java8
 
+## 前言
+
+从某些角度看，把**代码传递给方法**和**接口中的默认方法**，可以看做Java8加入`Stream API`的直接原因 。
+
+在`Java 8`之前需要使用匿名类来实现行为参数化。
+
+『没有可以共享的可变数据、将代码传递给其他方法的能力』是*函数式编程*的基石。 
+
 ## 一个苹果开始
 
 假设有一个苹果类，我们要从苹果列表中筛选出颜色为绿色的那些苹果 ：
@@ -81,7 +89,11 @@ filterApples(inventory,apple -> apple.getWeight() > 35 || apple.getColor() == Co
 
 ## 流
 
-几乎每一个Java应用都会处理集合，例如，你需要从一个列表中筛选出金额较高的交易，并且按照货币进行分组 ：（代码中的`Currency`是JDK自带类型）
+### 什么是『数据流』
+
+数据流：数据流是指一组有顺序的、有起点和终点的字节集合，程序从键盘中接受数据或者向文件中写入数据，或者在网络连接上的读写操作，都可以使用数据流来完成。
+
+几乎每一个Java应用都会处理集合，例如，你需要从一个列表中筛选出金额较高的交易，并且按照货币进行分组。（代码中的`Currency`是JDK自带类型）
 
 ```java
 public class Transaction {
@@ -130,6 +142,25 @@ System.out.println(transactionsByCurrencies);
 ```
 
 我们暂时不需要理解这段代码，只需要知道有了流之后，代码量可以大幅度减少。
+
+新的`Stream API`和Java现有的集合API行为差不多：他们都能够访问数据项目的序列。`Collection`主要是为了存储和访问数据，而`Stream`主要用于描述对数据的计算。 `Stream`提倡使用并行处理一个`Stream`元素，筛选一个`Collection`最快方法就是将其转换成`Stream` ，然后再转换回`List` 。
+
+『利用`Stream`和`Lambda`』
+
+顺序处理 ：
+
+```java
+List<Apple> heavyApples = inventory.stream().filter(apple -> apple.getWeight().compareTo(30d) > 0).collect(Collectors.toList());
+```
+
+并行处理 ：
+
+```java
+List<Apple> heavyApples = inventory.parallelStream().filter(apple -> apple.getWeight().compareTo(30d) > 0)
+                    .collect(Collectors.toList());
+```
+
+
 
 ## 默认方法
 
