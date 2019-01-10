@@ -151,7 +151,7 @@ public interface Predicate{
 (Apple) -> boolean // 返回一个boolean类型的对象 而不是一个Integer
 ```
 
-## 环绕执行模式
+## 把Lambda付诸实践 —— 环绕执行模式
 
 **环绕执行模式**：资源处理（例如处理文件或者数据库）时常见的一个模式就是打开一个资源、做一些处理、然后关闭资源。这个设置和清理阶段总是很类似，并且会围绕着执行处理的那些重要的代码，这就是所谓的*环绕执行*模式
 
@@ -354,7 +354,7 @@ predicate.test(5);
 
 ### 异常和函数式接口
 
-Java API中提供的函数是接口都没有抛出受检异常，如果你需要Lambda表达式来抛出异常，有两种方式 ：
+Java API中提供的函数式接口都没有抛出受检异常，如果你需要Lambda表达式来抛出异常，有两种方式 ：
 
 - 定义自己的函数式接口，并声明受检异常 ：
 
@@ -436,9 +436,13 @@ inventory.sort((a1,a2)->a1.getWeight().compareTo(a2.getWeight()));
 inventory.sort(Comparator.comparing(Apple::getWeight));
 ```
 
+`Apple::getWeight`方法引用其实就是lambda表达式`(Apple a)->a.getWeight()`的快捷方式。
+
 ### 管中窥豹
 
-当你需要使用方法引用时，目标引用放在分隔符`::`前面，方法的名称放在后面 。例如，`Apple::getWeight`就是引用了`Apple`类中定义的方法`getWeight()`。方法引用**🚫不需要括号**，因为你没有实际调用这个方法 。
+当你需要使用方法引用时，目标引用放在分隔符`::`前面，方法的名称放在后面 。例如，`Apple::getWeight`就是引用了`Apple`类中定义的方法`getWeight()`。
+
+方法引用**🚫不需要括号**，因为你没有实际调用这个方法 。
 
 | `Lambda` | 等效的方法引用 |
 | :------: | :-----------: |
@@ -461,5 +465,174 @@ List<String> str = Arrays.asList("a","b","A","B");
 str.sort(String::compareToIgnoreCase);
 ```
 
+### 三类方法引用
+
+- 指向<u>静态方法</u>的方法引用 。
+
+```
+Integer的parseInt方法 ——» Integer::parseInt
+```
+
+- 指向<u>任意类型实例方法</u>的方法引用（你在引用一个对象的方法，而这个对象本身是Lambda参数）
+
+```
+(String s)->s.toUpperCase()
+String::toUpperCase
+```
+
+- 指向<u>现有对象的实例方法</u>的方法引用（你在Lambda中调用一个已经存在的外部对象中的方法）
+
+```
+()->expensive.getValue()
+expensive::getValue
+```
+
 ### 构造函数引用
+
+`ClassName::new`可以创建构造函数的引用，例如，若一个构造函数没有参数，那么他适合`Supplier`的签名 ：
+
+```
+Supplier<Apple> c1 = ()->new Apple();
+Apple a1 = c1.get();
+```
+
+等价于 ：
+
+```java
+Supplier<Apple> c1 = Apple::new;
+Apple a1 = c1.get();
+```
+
+如果你的构造函数签名为`Apple(Double weight)`，那么它适合`Function`的签名 ：
+
+```java
+Function<Double,Apple> f = (weight)->new Apple(weight);
+Apple a2 = f.apply(12d);
+```
+
+等价于 ：
+
+```java
+Function<Double,Apple> f = Apple::new;
+Apple a2 = f.apply(12d);
+```
+
+下述代码中，有一个由`Double`组成的`List`中的每一个元素都通过`map`方法传递给了`Apple`的构造函数，得到了一个具有不同重量苹果的`List`：
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        List<Double> weights = Arrays.asList(13d, 4d, 5d);
+        List<Apple> list1 = map(weights, Apple::new);
+        System.out.println(list1);
+	}
+    public static <T, R> List<R> map(List<T> list, Function<T, R> f) {
+        List<R> result = new ArrayList<>();
+        for (T item : list) {
+            result.add(f.apply(item));
+        }
+        return result;
+    }
+}
+
+```
+
+如果你具有两个参数的构造函数`Apple(Color color,Double weight)`，那么他就适合`BiFunction`接口的签名 ：
+
+```java
+BiFunction<Color, Double, Apple> biFunction = Apple::new;
+// 与下面一句等价
+BiFunction<Color, Double, Apple> biFunction = (Color c,Double b)->new Apple(c,b);
+Apple a = biFunction.apply(Color.BLUE, 24d);
+```
+
+## 复合Lambda表达式的有用方法
+
+### 比较器复合
+
+```java
+List<Apple> inventory = Arrays.asList(
+        new Apple(Color.BLUE, 12d),
+        new Apple(Color.RED, 5d),
+        new Apple(Color.YELLOW, 30d),
+        new Apple(Color.RED, 12d)
+);
+Comparator<Apple> c = Comparator.comparing(Apple::getWeight);
+// 逆序
+inventory.sort(Comparator.comparing(Apple::getWeight).reversed());
+System.out.println("逆序 ： " + inventory);
+// 比较器链
+inventory.sort(Comparator.comparing(Apple::getWeight)
+        .reversed()
+        .thenComparing(Apple::getColor));
+System.out.println("按照重量从大到小&按照颜色排序 : " + inventory);
+```
+
+### 谓词复合
+
+谓词复合有这样几个函数 ：`negate`、`and`和`or`
+
+```java
+Apple apple = new Apple(Color.RED, 15d);
+Predicate<Apple> redApple = (t) -> t.getColor() == Color.RED;
+Predicate<Apple> notRedPredicate = redApple.negate();
+// false
+System.out.println(notRedPredicate.test(apple));
+Predicate<Apple> redAndHeavyApple = redApple.and(item -> item.getWeight() > 10d);
+// true
+System.out.println(redAndHeavyApple.test(apple));
+apple.setColor(Color.BLUE);
+apple.setWeight(4d);
+// false
+System.out.println(redAndHeavyApple.test(apple));
+Predicate<Apple> redAndHeavyAppleOrBlue = redApple.and(item -> item.getWeight() > 10d)
+        .or(item -> item.getColor() == Color.BLUE);
+// true
+System.out.println(redAndHeavyAppleOrBlue.test(apple));
+```
+
+### 函数符合
+
+```java
+Function<Integer, Integer> f = x -> x + 1;
+Function<Integer, Integer> g = x -> 2 * x;
+Function<Integer, Integer> h = f.andThen(g); // 相当于 g(f(x))
+System.out.println(h.apply(3)); // 8
+h = f.compose(g); // 相当于 f(g(x))
+System.out.println(h.apply(3)); // 7
+```
+
+对用`String`表示的一封信做出转换 ：
+
+```java
+public class Letter {
+    public static String addHeader(String text) {
+        return "From Zhang : " + text;
+    }
+    public static String addFooter(String text) {
+        return text + "\n 至上.";
+    }
+    public static String checkSpelling(String text) {
+        return text.replaceAll("Labda", "lambda");
+    }
+    public static void main(String[] args) {
+        Function<String, String> addHeader = Letter::addHeader;
+        Function<String, String> transformation = addHeader.andThen(Letter::checkSpelling)
+                .andThen(Letter::addFooter);
+        String result = transformation.apply("我喜欢用Labda");
+        //From Zhang : 我喜欢用lambda
+ 		// 至上.
+        System.out.println(result);
+        transformation = addHeader.andThen(Letter::addFooter);
+        result = transformation.apply("我喜欢用Lambda~");
+        //From Zhang : 我喜欢用Lambda~
+ 		// 至上.
+        System.out.println(result);
+    }
+}
+```
+
+
+
+
 

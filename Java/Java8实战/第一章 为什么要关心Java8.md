@@ -136,8 +136,11 @@ System.out.println(transactionsByCurrencies);
 
 ```java
 Map<Currency,List<Transaction>> transactionsByCurrencies = transactions.stream()
-        .filter(transaction -> transaction.getPrice().compareTo(BigDecimal.valueOf(1000)) > 0) // 筛选金额较高的交易
-        .collect(Collectors.groupingBy(Transaction::getCurrency)); // 按照货币进行分组
+        .filter(transaction -> transaction.getPrice()
+        // 筛选金额较高的交易
+        .compareTo(BigDecimal.valueOf(1000)) > 0)
+        // 按照货币进行分组
+        .collect(Collectors.groupingBy(Transaction::getCurrency));
 System.out.println(transactionsByCurrencies);
 ```
 
