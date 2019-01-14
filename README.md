@@ -21,9 +21,11 @@
 
 ### Java8实战
 
-- [第一章 为什么要关心Java8](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%85%B3%E5%BF%83Java8.md)
-- [第二章 通过行为参数化传递代码](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E9%80%9A%E8%BF%87%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96%E4%BC%A0%E9%80%92%E4%BB%A3%E7%A0%81.md)
-- 未完待续 ……
+- [第一章 为什么要关心Java8](Java/Java8实战/第一章 为什么要关心Java8.md)
+- [第二章 通过行为参数化传递代码](Java/Java8实战/第二章 通过行为参数化传递代码.md)
+- [第三章 Lambda表达式](Java/Java8实战/第三章 Lambda表达式.md)
+- [第四章 引入流](Java/Java8实战/第四章 引入流.md)
+- 未完待续……
 
 ### 自己的Java学习笔记
 
