@@ -21,10 +21,10 @@
 
 ### Java8实战
 
-- [第一章 为什么要关心Java8](/Java/Java8实战/第一章 为什么要关心Java8.md)
-- [第二章 通过行为参数化传递代码](/Java/Java8实战/第二章 通过行为参数化传递代码.md)
-- [第三章 Lambda表达式](/Java/Java8实战/第三章 Lambda表达式.md)
-- [第四章 引入流](/Java/Java8实战/第四章 引入流.md)
+- [第一章 为什么要关心Java8](./Java/Java8实战/第一章 为什么要关心Java8.md)
+- [第二章 通过行为参数化传递代码](./Java/Java8实战/第二章 通过行为参数化传递代码.md)
+- [第三章 Lambda表达式](./Java/Java8实战/第三章 Lambda表达式.md)
+- [第四章 引入流](./Java/Java8实战/第四章 引入流.md)
 - 未完待续……
 
 ### 自己的Java学习笔记
