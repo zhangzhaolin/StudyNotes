@@ -2,11 +2,15 @@
 
 ## 前言
 
-从某些角度看，把**代码传递给方法**和**接口中的默认方法**，可以看做Java8加入`Stream API`的直接原因 。
+### 行为参数化
+
+行为参数化，就是可以帮助我们处理频繁变化需求的一种**软件开发模式**。通俗的说，就是拿出一个代码块，把它准备好，而不去执行它。这个代码块以后可以被程序的其他部分调用，这就意味着我们需要延迟这段代码的执行。
 
 在`Java 8`之前需要使用匿名类来实现行为参数化。
 
-『没有可以共享的可变数据、将代码传递给其他方法的能力』是*函数式编程*的基石。 
+### ✍函数式编程
+
+函数式编程：Java8里面将代码传递给方法的功能（同时也能够返回代码并将其包含在数据结构中），还让我们使用一整套新技巧。
 
 ## 一个苹果开始
 
@@ -162,8 +166,6 @@ List<Apple> heavyApples = inventory.stream().filter(apple -> apple.getWeight().c
 List<Apple> heavyApples = inventory.parallelStream().filter(apple -> apple.getWeight().compareTo(30d) > 0)
                     .collect(Collectors.toList());
 ```
-
-
 
 ## 默认方法
 

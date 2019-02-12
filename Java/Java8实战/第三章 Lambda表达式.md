@@ -120,7 +120,7 @@ process(()->System.out.println("Hello World 3"));
 
 ### 函数描述符
 
-函数式接口中抽象方法描述了Lambda表达式的签名，我们将抽象方法所描述的Lambda形式称为**函数描述符**。
+函数式接口的抽象方法的签名基本上就是Lambda表达式的签名。我们将这种抽象方法叫做**函数描述符**。
 
 Lambda表达式可以被赋值给一个变量，或传递给一个接受函数式接口作为参数的方法，当然，这个Lambda表达式签名要和函数式接口的抽象方法一样。比如 ：
 
@@ -133,7 +133,7 @@ Lambda表达式可以被赋值给一个变量，或传递给一个接受函数�
 下面的例子是错误的 ：
 
 ```java
-Predicate<Apple> p = (Apple apple) -> apple.getWeight();
+Predicate<Apple> p = (Apple apple) -> apple.getWeight(); //! ERROR
 ```
 
 因为`Predicate`源码如下所示 ：
@@ -241,6 +241,8 @@ String result = processFile((reader) -> {
 
 ### `Predicate`
 
+`java.util.function.Predicate<T>`接口定义了一个名叫`test`的抽象方法，它接受泛型`T`对象，并返回一个`boolean`。
+
 ```java
 @FunctionalInterface
 public interface Predicate<T>{
@@ -272,6 +274,8 @@ public static void main(String[] args) {
 
 ### `Consumer`
 
+`java.util.function.Consumer<T>`定义了一个名为`accept`的抽象方法，它接受泛型`T`对象，没有返回（`void`）
+
 ```java
 @FunctionalInterface
 public interface Consumer<T>{
@@ -292,6 +296,8 @@ forEach(Arrays.asList(1,2,3,4),(Integer i)->System.out.println(i));
 ```
 
 ### `Function`
+
+`java.util.function.Function<T,R>`接口定义了一个叫做`apply`的方法，它接受一个泛型`T`的对象，并返回一个泛型`R`的对象。
 
 ```java
 @FunctionalInterface
@@ -330,8 +336,6 @@ public interface IntPredicate{
     boolean test(int value);
 }
 ```
-
-
 
 ```java
 IntPredicate intPredicate = (int i)->i%2 == 0;
@@ -427,7 +431,7 @@ Runnable runnable = ()->System.out.println(portNumber);
 
 ## 方法引用
 
-方法引用可以让你重复使用现有的方法定义，并像Lambda一样传递它们，如下是使用方法引用写的排序的例子 ：
+方法引用可以被看作仅仅调用特定方法的Lambda的一种快捷写法。方法引用可以让你重复使用现有的方法定义，并像Lambda一样传递它们，如下是使用方法引用写的排序的例子 ：
 
 ```java
 // before
@@ -632,7 +636,16 @@ public class Letter {
 }
 ```
 
+## 小结
 
+- Lambda表达式可以看做是一种匿名函数：它没有名称，但有参数列表、函数主题、返回类型，可能还有一个可以抛出的异常的列表。
+- **函数式接口**就是仅仅声明了一个抽象方法的接口
+- Java8提供了常见的函数式接口，放在`java.util.function`包里，包括`Predicate<T>`、`Function<T,R>`、`Supplier<T>`、`Consumer<T>`和`BinaryOperator<T>`
+- 为了避免装箱操作，对`Predicate<T>`和`Function<T,R>`等通用函数式接口的原型类型特化 ：`IntPredicate`、`IntToLongFunction`等
+- 环绕执行模式（即在方法所必需的代码中间，你需要执行点儿什么操作，比如资源分配和清理）可以配合Lambda提高灵活性和可重用性
+- Lambda表达式所需要代表的类型称为目标类型
+- 方法引用让你重复使用现在的方法实现并直接传递它们
+- `Comparator`、`Predicate`和`Function`等函数式接口都有几个可以用来结合Lambda表达式的默认方法
 
 
 
