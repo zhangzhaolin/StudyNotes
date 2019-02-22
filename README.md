@@ -25,6 +25,8 @@
 - [第二章 通过行为参数化传递代码](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E9%80%9A%E8%BF%87%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96%E4%BC%A0%E9%80%92%E4%BB%A3%E7%A0%81.md?1547455559971)
 - [第三章 Lambda表达式](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E4%B8%89%E7%AB%A0%20Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F.md?1547455570557)
 - [第四章 引入流](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%BC%95%E5%85%A5%E6%B5%81.md?1547455586622)
+- [第五章 使用流](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E6%B5%81.md?1550805683532)
+- [第六章 使用流收集数据](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E7%94%A8%E6%B5%81%E6%94%B6%E9%9B%86%E6%95%B0%E6%8D%AE.md?1550806061781)
 - 未完待续……
 
 ### 自己的Java学习笔记
