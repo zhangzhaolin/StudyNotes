@@ -27,7 +27,8 @@
 - [第四章 引入流](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%BC%95%E5%85%A5%E6%B5%81.md?1547455586622)
 - [第五章 使用流](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E6%B5%81.md?1550805683532)
 - [第六章 使用流收集数据](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E7%94%A8%E6%B5%81%E6%94%B6%E9%9B%86%E6%95%B0%E6%8D%AE.md?1550806061781)
-- 未完待续……
+- [第七章 并行数据处理与性能](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Java8%E5%AE%9E%E6%88%98/%E7%AC%AC%E4%B8%83%E7%AB%A0%20%E5%B9%B6%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B8%8E%E6%80%A7%E8%83%BD.md)
+- 
 
 ### 自己的Java学习笔记
 
