@@ -400,8 +400,8 @@ bean的声明周期经常会被问到，但是却又很难记忆 （建议把接
 >- Spring将值和Bean的引用注入进Bean对应的属性中
 >- 如果Bean实现了`BeanNameAware`接口，Spring将Bean的ID传递给`setBeanName()`方法（实现`BeanNameAware`接口的主要是为了通过Bean的引用来获得Bean的ID，一般业务中是很少有用到Bean的ID的）
 >- 如果Bean实现了`BeanFactoryAware`接口，Spring将调用`setBeanDactory(BeanFactory bf)`方法并把`BeanFactory`容器实例作为参数传入。（**实现`BeanFactoryAware`主要目的是为了获取Spring容器，如Bean通过Spring容器发布事件等）**
->- 如果Bean实现了`ApplicationContextAware`接口，Spring容器将调用`setApplicationContext(ApplicationContext ctx)`方法，把应用上下文作为参数传入。**(作用与BeanFactory类似都是为了获取Spring容器，不同的是Spring容器在调用setApplicationContext方法时会把它自己作为`setApplicationContext `的参数传入，而Spring容器在调用`setBeanDactory`前需要程序员自己指定（注入）`setBeanFactory`里的参数`BeanFactory `)**
->- 如果Bean实现了`BeanPostProcessor`接口，Spring将调用它们的`postProcessBeforeInitialization`（预初始化）方法**（作用是在Bean实例创建成功后对进行增强处理，如对Bean进行修改，增加某个功能）**
+>- 如果Bean实现了`ApplicationContextAware`接口，Spring容器将调用`setApplicationContext(ApplicationContext ctx)`方法，把应用上下文作为参数传入。**(作用与BeanFactory类似都是为了获取Spring容器，不同的是Spring容器在调用`setApplicationContext()`方法时会把它自己作为`setApplicationContext`的参数传入，而Spring容器在调用`setBeanDactory`前需要程序员自己指定（注入）`setBeanFactory`里的参数`BeanFactory`)**
+>- 如果Bean实现了`BeanPostProcessor`接口，Spring将调用它们的`postProcessBeforeInitialization`（预初始化）方法 **(作用是在Bean实例创建成功后对进行增强处理，如对Bean进行修改，增加某个功能)**
 >- 如果Bean实现了`InitializingBean`接口，Spring将调用它们的`afterPropertiesSet`方法，作用与在配置文件中对Bean使用`init-method`声明初始化的作用一样，都是在Bean的全部属性设置成功后执行的初始化方法。
 >- 如果Bean实现了`BeanPostProcess`接口，Spring将调用它们的`postProcessAfterInitialization`（后初始化）方法（**作用与6的一样，只不过6是在Bean初始化前执行的，而这个是在Bean初始化后执行的，时机不同 )**
 >- 经过以上的工作后，Bean将一直驻留在应用上下文中给应用使用，直到应用上下文被销毁
