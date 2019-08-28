@@ -710,3 +710,4 @@ public class SoundSystemConfig {
 
 # 小结
 
+![装配bean](https://raw.githubusercontent.com/zhangzhaolin/StudyNotes/master/%E7%BB%98%E5%9B%BE/Spring%E5%AE%9E%E6%88%98/%E8%A3%85%E9%85%8DBean.png)
