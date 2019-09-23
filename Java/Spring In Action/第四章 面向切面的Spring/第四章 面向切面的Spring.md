@@ -6,6 +6,8 @@
 
 在软件开发中，散布于应用中多处的功能被称为 **横切关注点**，例如事务、安全、日志、权限控制………通常来讲，这些**横切关注点**从概念上是与业务的应用逻辑相分离的。把这些横切关注点与业务逻辑相分离正是面向切面编程所要解决的问题。
 
+依赖注入（DI）有助于应用对象之间的解耦，而AOP可以实现横切关注点与它们所影响的对象之间的解耦。
+
 横切关注点可以被模块化为特殊的类，这些类被称为**切面**
 
 ## 面向切面常用术语
@@ -28,15 +30,17 @@ Spring切面可以应用五种类型的通知 :
 
 ### 连接点
 
-连接点就是在 **应用执行过程中** 能够 **插入切面** 的一个点
+连接点就是在 **应用执行过程中** 能够 **插入切面** 的一个点。这个点可以是调用方法时、抛出异常时、甚至修改一个字段时。
 
 ### 切点
 
-一个切面不需要通知应用的所有连接点。切点有助于**缩小切面所通知的连接点**。如果说通知定义了切点是什么以及切点在何时使用的话，那么切点就定义了“何处”。切点的定义会匹配通知所要 **织入** 的一个或者多个连接点。
+一个切面不需要通知应用的所有连接点。切点有助于**缩小切面所通知的连接点**。如果说通知定义了切面是什么以及切面在何时使用的话，那么切点就定义了“何处”。
+
+切点的定义会匹配通知所要 **织入** 的一个或者多个连接点。通常使用一个明确的类和方法名称，或者利用正则表达式定义所匹配的类和方法名称来指定这些切点。
 
 ### 切面
 
-切面是通知和切点的结合。通知和切点共同定义了切面的全部内容——它是什么，在何时和何处完成其功能。
+切面是通知和切点的结合。通知和切点共同定义了切面的全部内容 —— 它是什么，在何时和何处完成其功能。
 
 ### 引入
 
@@ -46,9 +50,9 @@ Spring切面可以应用五种类型的通知 :
 
 织入是**把切面应用到目标对象并创建新的代理的过程**。切面在指定的连接点被织入到目标对象中。在目标对象的生命周期里有多个点可以进行织入 ：
 
-- 编译期 ： 切面在目标类编译时被织入。这种方式需要有特殊的编译器。
-- 类加载期 ：切面在目标类加载到JVM时被织入。这种方式需要有特殊的类加载器。
-- 运行期 ：切面在应用运行的某个某个时刻被织入。一般情况下，在织入切面时，AOP容器会为目标对象动态地创建一个代理对象。Spring AOP就是以这种方式注入切面的。
+- 编译期 ： 切面在目标类 **编译** 时被织入。这种方式需要有特殊的编译器。例如AspectJ编译器。
+- 类加载期 ：切面在目标类 **加载到JVM** 时被织入。这种方式需要有特殊的类加载器（`ClassLoader`）。这类类加载器可以在目标类引入应用之前增强该目标类的字节码。例如AspectJ 5的加载时织入（`LTW`）。
+- 运行期 ：切面在 **应用运行的某个某个时刻** 被织入。一般情况下，在织入切面时，AOP容器会为目标对象动态地创建一个代理对象。例如Spring AOP。
 
 ### 总结
 
@@ -58,20 +62,26 @@ Spring切面可以应用五种类型的通知 :
 
 Spring提供了四种类型的AOP支持 ：
 
-- [x] 基于代理的经典Spring AOP
-- [ ] 纯POJO切面（借助`aop`命名空间可以将POJO转换为切面，需要XML配置）
-- [ ] `@AspectJ`注解驱动的切面（不使用XML来完成功能）
-- [ ] 注入式`AspectJ`切面（如果AOP需求超过了简单的方法调用如构造器或者属性拦截，那么你需要考虑使用`AspectJ`来实现切面，适用于Spring各版本）
+- [x] <s>基于代理的经典Spring AOP</s>
+- [x] 纯POJO切面（借助`aop`命名空间可以将POJO转换为切面，需要XML配置）
+- [x] `@AspectJ`注解驱动的切面（使用注解来完成功能）
+- [x] 注入式`AspectJ`切面（如果AOP需求超过了简单的方法调用，如构造器或者属性拦截，那么你需要考虑使用`AspectJ`来实现切面，适用于Spring各版本）
 
-Spring通知是使用Java编写的，定义通知所应用的切点通常会使用注解或XML编写。
+通过在代理类中包裹切面，Spring在运行期把切面织入（通过指定的 **连接点** ）到Spring管理的bean（也就是 **目标对象** ）中。如图，代理类封装了目标类，并拦截被通知方法的调用，再把调用转发给真正的目标bean。当代理拦截到方法调用时，**在调用目标bean方法之前，会执行切面逻辑**。
 
-通过在代理类中包裹切面（通知 + 切点），Spring在运行期把切面织入到Spring管理的bean中。如图，代理类封装了目标类，并拦截被通知方法的调用，再把调用转发给真正的目标bean。当代理拦截到方法调用时，**在调用目标bean方法之前，会执行切面逻辑**。
+- 在代理类中包裹切面
+- 在运行期间把切面织入到Spring管理的Bean（目标对象）
+- 代理类封装目标类，拦截被通知方法的调用
+- 在调用目标对象Bean方法之前，执行切面逻辑
+- 把调用转发给真正的目标Bean
 
 ![SPring的切面由包裹了目标对象的代理类实现。代理类处理方法的调用，执行额外的切面逻辑，并调用目标方法](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-8-12/38529126.jpg)
 
 直到应用需要被代理的bean时，Spring才会创建代理对象。
 
-因为Spring基于动态代理，所以Spring只支持方法连接点。Spring缺少对字段连接点的支持，无法让我们创建细粒度的通知，例如拦截对象字段的修改。
+因为Spring基于动态代理，所以Spring只支持方法连接点。Spring缺少对字段连接点的支持，无法让创建细粒度的通知，例如拦截对象字段的修改。而且它不支持构造器连接点，无法在bean创建时应用通知。
+
+如果需要方法拦截点之外的拦截点拦截功能，我们可以利用AspectJ来补充Spring AOP的功能。
 
 ## 通过切点来选择连接点
 
@@ -84,7 +94,7 @@ execution(modifiers-pattern? ret-type-pattern declaring-type-pattern?name-patter
             throws-pattern?)
 ```
 
-除了返回类型、方法名称以及参数列表之外，其余都是可选的（即含有`?`的都是可选的）
+除了返回类型（`ret-type-pattern`）、方法名称（`name-pattern`）以及参数列表（`param-pattern`）之外，其余都是可选的（即含有`?`的都是可选的）。
 
 - `modifiers-pattern?` ：方法修饰符（public、private、默认、protected）
 - `ret-type-pattern` ：方法返回类型
@@ -92,6 +102,10 @@ execution(modifiers-pattern? ret-type-pattern declaring-type-pattern?name-patter
 - `name-pattern` ：方法名
 - `param-pattern` ：方法参数类型，可有一个或者多个，用`(..)`表示零个或者任意个参数，多个参数还可以用`,`分隔，也可以用`(*)`表示匹配任意类型的参数
 - `throws-pattern?` ：表示方法抛出的异常
+
+> `ret-type-pattern`用来确定方法的返回类型，以匹配连接点。`*`最常用作方法返回类型模式。它匹配任何返回类型。在方法返回给定类型时，全限定类名才会匹配。`name-pattern`匹配方法名称。你可以使用`*`通配符作为`name-pattern`的全部或者部分。如果您指定了`declaring-type-pattern`（方法类所在路径），请在后面加上`.`来链接方法名称。`param-pattern`（方法参数类型）稍微复杂一些：`()`匹配不带参数的方法，`(..)`匹配任意数量（零个或者多个）的参数。`(*)`匹配采用任意类型的一个参数方法。`(*,String)`匹配一个带有两个参数的方法，第一个可以是任何类型，第二个必须是`String`类型。
+>
+> <span style="text-align:right">翻译自：https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-schema</span>
 
 例如 ：
 
@@ -125,7 +139,23 @@ execution(* com.xyz.service.*.*(..))
 execution(* com.xyz.service..*.*(..))
 ```
 
+在`service`包下面的所有连接点（在Spring AOP仅仅执行方法）
 
+```
+within(com.xyz.service.*)
+```
+
+在`service`包和子包下的所有连接点（在Spring AOP仅仅执行方法）
+
+```
+within(com.xyz.service..*)
+```
+
+实现`AccountService`接口的代理中的所有连接点
+
+```
+this(com.xyz.service.AccountService)
+```
 
 | Aspect指示器  |                     描述                     |
 | :-----------: | :------------------------------------------: |
@@ -152,7 +182,7 @@ public interface Performance{
 我们想要编写一个切面，在调用`Performance`类中的`perform`方法时触发通知 ：
 
 ```java
-execution(public * concert.Performance.perform(..))
+execution(* concert.Performance.perform(..))
 ```
 
 
@@ -178,6 +208,12 @@ execution(* concert.Performance.perform(..) and bean('woodstock'))
 ```
 
 在上面的例子中，我们希望在执行`perform()`方法时应用通知，但是限制bean的ID为`woodstock`
+
+我们还可以使用非操作作为除了特定ID以外的其他bean应用通知 ：
+
+```java
+execution(* concert.Performance.perform(..) and !bean('woodstock'))
+```
 
 ## 使用注解创建切面
 
@@ -255,11 +291,9 @@ public class Audience {
 
 ```
 
-
-
 我们还需要启动AspectJ的自动代理 ：
 
-如果你使用JavaConfig注解的话，你可以在配置类上加上`@EnableAspectJAutoProxy`注解启动自动代理的功能
+如果你使用`JavaConfig`注解的话，你可以在配置类上加上`@EnableAspectJAutoProxy`注解启动自动代理的功能。
 
 ```java
 // 启动AspectJ自动代理
@@ -315,10 +349,9 @@ public class Audience {
 
  ### 为通知传递参数
 
-在`BlankDisc`中，我们需要统计磁道被播放的数量 ：
+在`BlankDisc`中，我们需要统计磁道被播放的数量 ：**（请注意，Spring AOP无法拦截内部方法的调用）**
 
 ```java
-
 public class BlankDisc implements CompactDisc {
 
     private String title;
@@ -339,9 +372,10 @@ public class BlankDisc implements CompactDisc {
         return tracks;
     }
     public void play() {
-        System.out.println("title :" + title + " artist :" + artist);
         for (int trackNumber = 0;trackNumber < tracks.size();trackNumber ++){
-            playTrack(trackNumber);
+            // 请注意，Spring AOP无法拦截内部方法的调用
+            // ! playTrack(trackNumber);
+            ((CompactDisc) (AopContext.currentProxy())).playTrack(trackNumber);
         }
     }
     public void playTrack(int trackNumber) {
@@ -355,34 +389,45 @@ public class BlankDisc implements CompactDisc {
 ```java
 @Aspect
 @Component
-@EnableAspectJAutoProxy
 public class TrackCounter {
-    public Map<Integer,Integer> trackCounts = new HashMap<Integer, Integer>();
-    @Pointcut("execution(public * soundsystem.BlankDisc.playTrack(int)) && args(trackNumber))")
-    public void trackPlayed(int trackNumber){}
-    @AfterReturning("trackPlayed(trackNumber)")
-    public void countTrack(int trackNumber){
-        trackCounts.put(trackNumber,getPlayCount(trackNumber) + 1);
-        System.out.println("--->track " + trackNumber + "数量增加了.");
+
+    public Map<Integer, Integer> trackCounts = new HashMap<>();
+
+    @Pointcut("execution(* soundsystem.BlankDisc.playTrack(int))  && args(trackNumber)")
+    public void trackedPlay(int trackNumber) {
     }
-    public int getPlayCount(int trackNumber){
-        return trackCounts.containsKey(trackNumber)?
-                trackCounts.get(trackNumber):0;
+
+    @AfterReturning(value = "trackedPlay(trackNumber)", argNames = "trackNumber")
+    public void countTrack(int trackNumber) {
+        trackCounts.compute(trackNumber, (k, v) -> v == null ? 1 : v + 1);
+        System.out.println(trackCounts);
+    }
+
+    public int getPlayCount(int trackNumber) {
+        return trackCounts.getOrDefault(trackNumber, 0);
     }
 }
 ```
 
-切点表达式中的`args(trackNumber)`表明 ：**传递给连接点的int类型的参数也会传递到通知方法中**。参数的名称为`trackNumber`，与切点方法签名中的参数相匹配。在`@AfterReturing("trackNumber")`表达式下面，切点方法和切点定义的参数名一致。
+切点表达式中的`args(trackNumber)`表明 ：**传递给连接点的`int`类型的参数也会传递到通知方法中**。参数的名称为`trackNumber`，与切点方法签名中的参数相匹配。在`@AfterReturing("trackNumber")`表达式下面，切点方法和切点定义的参数名一致。
 
 ### 通过注解引入新功能
 
 TODO
 
+### 缺陷
+
+面向注解的切面声明有一个明显的劣势：你必须要为通知类添加注解，为了做到这一点，必须要有源代码。
+
 ## 在XML中声明切面
+
+把bean声明为一个切面时，必须从`<aop:config>`元素开始配置。在`<aop:config>`中，我们可以声明一或多个通知器、切面或者切点。在下面的例子中，使用了`<aop:aspect>`声明了一个简单的切面。
 
 ### 前置后置通知
 
 ```xml
+<bean id="audience" class="concert.Audience"/>
+
 <!-- 切面配置 -->
 <!-- 顶层的aop配置元素 -->    
 <aop:config>
@@ -400,7 +445,7 @@ TODO
             <aop:after-throwing method="demandRefund" pointcut-ref="perform"/>
 
         </aop:aspect>
-    </aop:config>
+</aop:config>
 ```
 
 ### 环绕通知
@@ -410,9 +455,9 @@ TODO
 <bean id="audience" class="concert.Audience"/>
 <aop:config>
 	<aop:aspect ref="audience">
- 	<aop:pointcut id="performance" expression="execution(public * concert.Performance.perform())"/>
- 	<aop:around method="execute" pointcut-ref="performance"/>
-    	</aop:aspect>
+ 		<aop:pointcut id="performance" expression="execution(public * concert.Performance.perform())"/>
+ 		<aop:around method="execute" pointcut-ref="performance"/>
+    </aop:aspect>
 </aop:config>
 ```
 
@@ -443,14 +488,12 @@ TODO
 ```
 
 ```xml
-<beans>
-	<aop:config>
-        <aop:aspect ref="trackCounter">
-        <aop:pointcut id="playTrack" expression="execution(* soundsystem.BlankDisc.playTrack(int)) and args(trackNumber)"/>
-        <aop:after-returning pointcut-ref="playTrack" method="countTrack"/>
-        </aop:aspect>
-    </aop:config>
-</beans>
+<aop:config>
+    <aop:aspect ref="trackCounter">
+        <aop:after-returning method="countTrack" arg-names="trackNumber"
+                             pointcut="execution(* soundsystem.CompactDisc.playTrack(int)) and args(trackNumber)"/>
+    </aop:aspect>
+</aop:config>
 ```
 
 ### 通过切面引入新的功能
@@ -461,7 +504,9 @@ TODO
 
 TODO
 
+## 总结
 
+![](https://raw.githubusercontent.com/zhangzhaolin/StudyNotes/master/%E7%BB%98%E5%9B%BE/Spring%E5%AE%9E%E6%88%98/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%9A%84Spring.png)
 
 
 
