@@ -11,13 +11,13 @@
 
 ### Spring in action
 
-- [第一章 Spring之旅](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B8%80%E7%AB%A0%20Spring%E4%B9%8B%E6%97%85/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%20Spring%E4%B9%8B%E6%97%85.md)
-- [第二章 装配Bean](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E8%A3%85%E9%85%8Dbean/%E8%A3%85%E9%85%8DBean.md)
-- [第三章 高级装配](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B8%89%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D/%E7%AC%AC%E4%B8%89%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D.md)
-- [第四章 面向切面编程](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%9A%84Spring/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%9A%84Spring.md)
-- [第五章 构建Spring Web应用程序](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%BA%94%E7%AB%A0%20%E6%9E%84%E5%BB%BASpring%20Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/%E7%AC%AC%E4%BA%94%E7%AB%A0%20%E6%9E%84%E5%BB%BASpring%20Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F.md)
-- [第七章 SpringMVC高级技术](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B8%83%E7%AB%A0%20SpringMVC%E7%9A%84%E9%AB%98%E7%BA%A7%E6%8A%80%E6%9C%AF/%E7%AC%AC%E4%B8%83%E7%AB%A0%20SpringMVC%E9%AB%98%E7%BA%A7%E6%8A%80%E6%9C%AF.md)
-- [第九章 保护web应用](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/%E7%AC%AC%E4%B9%9D%E7%AB%A0%20%E4%BF%9D%E6%8A%A4WEB%E5%BA%94%E7%94%A8/%E7%AC%AC%E4%B9%9D%E7%AB%A0%20%E4%BF%9D%E6%8A%A4web%E5%BA%94%E7%94%A8.md)
+- [1. Spring之旅](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/1.%20Spring%E4%B9%8B%E6%97%85.md)
+- [2. 装配Bean]()
+- [3. 高级装配]()
+- [4. 面向切面编程]()
+- [5. 构建Spring Web应用程序]()
+- [7. SpringMVC高级技术]()
+- [9. 保护web应用]()
 - 未完待续……
 
 ### Java8实战
