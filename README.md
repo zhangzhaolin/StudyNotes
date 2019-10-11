@@ -18,8 +18,6 @@
 - [05. 构建Spring Web应用程序](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/05.%20%E6%9E%84%E5%BB%BASpring%20Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F.md)
 - [06. 渲染WEB视图](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/06.%20%E6%B8%B2%E6%9F%93WEB%E8%A7%86%E5%9B%BE.md)
 - [07. SpringMVC高级技术](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/07.%20SpringMVC%E9%AB%98%E7%BA%A7%E6%8A%80%E6%9C%AF.md)
-- [09. 保护web应用](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/Spring%20In%20Action/09.%20%E4%BF%9D%E6%8A%A4web%E5%BA%94%E7%94%A8.md)
-- 未完待续……
 
 ### Java8实战
 
@@ -42,6 +40,10 @@
 - [`try-with-resources`语句](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/try-with-resources%20%E8%AF%AD%E5%8F%A5.md)
 - [Lambda简记](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%AE%80%E8%AE%B0.md)
 - 为什么说HashMap是不安全的(即将开坑...)
+
+### MARK
+
+1. [Do not understand the source code of Arrays.copyOf](https://stackoverflow.com/questions/29494800/do-not-understand-the-source-code-of-arrays-copyof)
 
 ## 前端
 
