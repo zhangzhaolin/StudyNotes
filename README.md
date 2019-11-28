@@ -38,7 +38,7 @@
 - [序列化和反序列化](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.md)
 - [Java泛型](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Java%E6%B3%9B%E5%9E%8B.md)
 - [`try-with-resources`语句](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/try-with-resources%20%E8%AF%AD%E5%8F%A5.md)
-- [快速失败 (`fail-fast` ) VS 安全失败 (`fail-safe` ) ]( (https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/%E5%BF%AB%E9%80%9F%E5%A4%B1%E8%B4%A5%EF%BC%88fail-fast%EF%BC%89%E5%92%8C%E5%AE%89%E5%85%A8%E5%A4%B1%E8%B4%A5%EF%BC%88fail-safe%EF%BC%89.md)
+- [快速失败 (`fail-fast` ) VS 安全失败 (`fail-safe` ) ](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/%E5%BF%AB%E9%80%9F%E5%A4%B1%E8%B4%A5%EF%BC%88fail-fast%EF%BC%89%E5%92%8C%E5%AE%89%E5%85%A8%E5%A4%B1%E8%B4%A5%EF%BC%88fail-safe%EF%BC%89.md)
 - 为什么说HashMap是不安全的(即将开坑...)
 
 ### MARK
