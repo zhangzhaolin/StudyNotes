@@ -56,3 +56,6 @@
 - [第六章 表单与v-model](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/%E8%A1%A8%E5%8D%95%E4%B8%8Ev-model.md)
 - [第七章 组件](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/%E7%AC%AC%E4%B8%83%E7%AB%A0%20%E7%BB%84%E4%BB%B6.md)
 - [第八章 自定义指令](https://github.com/zhangzhaolin/StudyNotes/blob/master/%E5%89%8D%E7%AB%AF/vue/%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4.md)
+
+## HTTP
+
