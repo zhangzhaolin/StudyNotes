@@ -17,7 +17,7 @@ public int divide(int divisor,int dividend){
 
 ## 集合中的 `fail-fast`
 
-在Java中的`fail-fast` 机制，通常指的是Java集合的一种错误检测机制。当多个线程对部分集合进行结构上的改变的操作时，有可能会产生 `fail-fast` 机制，这个时候会抛出 `ConcurrentModificationException`。
+在 Java 中的`fail-fast` 机制，通常指的是 Java 集合的一种错误检测机制。当多个线程对部分集合进行结构上的改变的操作时，有可能会产生 `fail-fast` 机制，这个时候会抛出 `ConcurrentModificationException`。
 
 当方法检测到对象的并发修改，但不允许这种修改时就会抛出 `ConcurrentModificationException`。
 
@@ -25,7 +25,7 @@ public int divide(int divisor,int dividend){
 
 ## 异常复现
 
-在Java中，如果在`foreach`循环里对某些集合元素进行元素的 `remove/add` 操作的时候，就会触发`fail-fast`机制，进而抛出 `ConcurrentModificationException`。
+在 Java 中，如果在 `foreach` 循环里对某些集合元素进行元素的 `remove/add` 操作的时候，就会触发 `fail-fast` 机制，进而抛出 `ConcurrentModificationException`。
 
 例如：
 
@@ -106,9 +106,9 @@ public abstract class AbstractList<E> ... {
 public class ArrayList<E> extends AbstractList<E> ...{ ... }
 ```
 
-例如，在`ArrayList`之中，我们可以看到`modCount`修改情况：
+例如，在 `ArrayList` 之中，我们可以看到 `modCount` 修改情况：
 
-![](https://raw.githubusercontent.com/zhangzhaolin/GraphBed/master/2019/11/20191121171133.png)
+![](https://raw.githubusercontent.com/zhangzhaolin/GraphBed/master/2020/01TIM%E6%88%AA%E5%9B%BE20200107145635.png)
 
 ### `expectedModCount`
 
@@ -200,7 +200,7 @@ while (iterator.hasNext()) {
 
 ## `fail-safe` 机制
 
-为了避免触发 `fail-fast` 机制导致异常，我们可以使用Java中提供的采用了 `fail-safe` 机制的集合类。
+为了避免触发 `fail-fast` 机制导致异常，我们可以使用 Java 中提供的采用了 `fail-safe` 机制的集合类。
 
 `fail-safe` 的集合容器在进行操作的时候，不是直接在集合内容上操作，而是先复制原有的集合内容，在拷贝的集合中进行操作。
 
@@ -273,7 +273,7 @@ static final class COWIterator<E> implements ListIterator<E> {
 ## 总结
 
 - `fail-fast`：快速失败，在发生异常时立即中断执行；`fail-safe`：安全失败，程序在发生某种错误或者异常时能够继续执行，不会被中断。
-- 在Java集合中，当多个线程同时对集合进行结构上的改变操作时，可能会产生 `fail-fast`，并抛出 `ConcurrentModificationException` 异常。
+- 在 Java 集合中，当多个线程同时对集合进行结构上的改变操作时，可能会产生 `fail-fast`，并抛出 `ConcurrentModificationException` 异常。
 - 当单个线程对集合进行结构修改时，也可能会产生上述异常。原因是因为使用 `for-each` 或者 `Iterator` 进行集合遍历时，若使用集合自带的方法对集合进行修改，只会引起 `modCount` 的变化，而不会引起`expectedModCount`的变化，当两个参数不相等时，会抛出异常。
 - `java.util.concurrent` 包下的集合都是 `fail-safe` 的。可以在 `for-each` 中使用自带的 `remove/add` 对集合进行修改而不会抛出异常。
 
