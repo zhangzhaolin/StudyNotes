@@ -60,3 +60,9 @@
 ## HTTP
 
 - [HTTP 协议简介](HTTP/HTTP协议简介.md)
+
+## 转载
+
+### JPA
+
+- [CascadeType 详解 _ Jeff Lee](转载/JPA/CascadeType 详解 _ Jeff Lee.md)
