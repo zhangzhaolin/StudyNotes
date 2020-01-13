@@ -76,7 +76,7 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2
 请求行包括：请求方法字段、URL 字段、HTTP版本协议字段。它们用空格分隔。例如：
 
 ```
-POST / HTTP 1.1
+POST / HTTP/1.1
 GET /background.png HTTP/1.0
 HEAD /test.html?query=alibaba HTTP/1.1
 OPTIONS /anypage.html HTTP/1.0
@@ -118,8 +118,6 @@ OPTIONS /anypage.html HTTP/1.0
 - `TRACE`
 
 - `PATCH`
-
-### 请求数据
 
 ## 06. `HTTP` 响应消息
 
