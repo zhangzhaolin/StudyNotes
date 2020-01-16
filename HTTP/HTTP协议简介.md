@@ -10,15 +10,21 @@
 
 ## 02. 主要特点
 
-- 支持 B/S 和 C/S 模式
+- 支持 B/S（客户/服务器）模式
+
 - 简单快速：客户向服务器请求服务时，只需传递请求方法和路径。请求方法常用的有 `GET`、`POST`、`HEAD`。每种方法规定了客户和服务器联系的类型不同。由于 HTTP 协议简单，使得 HTTP 服务器的程序规模小，因此通信速度很快
+
 - 灵活：HTTP 允许传递任意类型的数据对象。正在传输的类型由 `Content-Type` 标记
+
 - 无连接：每次连接只处理一次请求。服务器处理完客户的请求，并收到客户应答后，即断开连接。采用这种方式可以节省传输时间。
+
+  注意：HTTP/1.0 提出了持续连接的概念。HTTP/1.1 规定所有的连接都必须是持久的，除非显式的在头部加上 `Connection: close` 。`Keep-Alive` 功能使客户端到服务器端的连接持续有效，当出现对服务器的后继请求时，`Keep-Alive` 避免了建立或重新建立链接。
+
 - 无状态：HTTP 协议是无状态协议。无状态协议是指协议对事务处理没有记忆能力。缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快。
 
 ## 03. URL（统一资源定位符）
 
-统一资源定位符（英文缩写：URL ）是因特网上标准的资源地址，如同网络上的门牌。`URL` 标准格式如下：
+统一资源定位符（英文缩写：URL，英文全拼：`Uniform Resource Locator`）是因特网上标准的资源地址，如同网络上的门牌。`URL` 标准格式如下：
 
 ```
 [协议类型]://[服务器地址]:[端口号]/[资源层级UNIX文件路径][文件名]?[查询]#[片段ID]
@@ -73,7 +79,7 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2
 
 ### 请求行
 
-请求行包括：请求方法字段、URL 字段、HTTP版本协议字段。它们用空格分隔。例如：
+请求行包括：请求方法字段、请求目标（通常是指 URL 字段）、HTTP 版本协议字段。它们用空格分隔。例如：
 
 ```
 POST / HTTP/1.1
@@ -101,11 +107,40 @@ OPTIONS /anypage.html HTTP/1.0
 
   发送数据给服务器，请求主体的类型由 `Content-Type` 指定。与 `PUT`方法的区别是：`PUT` 方法是幂等的。而连续调用同一个 `POST` 可能会带来额外的影响，比如多次提交订单。
 
+  发出的 `POST` 请求主要有两种格式，一种是 `application/x-www-form-urlencoded` 用来传输简单的数据：
+
+  ```http
+  POST http://www.example.com HTTP/1.1
+  Content-Type: application/x-www-form-urlencoded;charset=utf-8
+  
+  title=test&sub%5B%5D=1&sub%5B%5D=2&sub%5B%5D=3
+  ```
+
+  一种是 `multipart/form-data` 主要用来上传文件：
+
+  ```http
+  POST http://www.example.com HTTP/1.1
+  Content-Type:multipart/form-data; boundary=----WebKitFormBoundaryrGKCBY7qhFd3TrwA
+  
+  ------WebKitFormBoundaryrGKCBY7qhFd3TrwA
+  Content-Disposition: form-data; name="text"
+  
+  title
+  ------WebKitFormBoundaryrGKCBY7qhFd3TrwA
+  Content-Disposition: form-data; name="file"; filename="chrome.png"
+  Content-Type: image/png
+  
+  PNG ... content of chrome.png ...
+  ------WebKitFormBoundaryrGKCBY7qhFd3TrwA--
+  ```
+
   🚀 幂等：连续调用一次和多次的效果相同（无副作用）。
 
 - `PUT`
 
   `PUT` 方法用于请求中的主体（数据）创建或者替换目标资源。
+
+  注意：如果用 `PUT` 更新资源，需要客户端提交资源全部信息。如果只有部分信息，不应该使用 `PUT`。
 
 - `DELETE`
 
@@ -147,12 +182,12 @@ OPTIONS /anypage.html HTTP/1.0
 
     ```
     Cache-Control: no-cache, no-store, must-revalidate
-    Cache-Control:public, max-age=31536000
+    Cache-Control: public, max-age=31536000
     ```
 
   - `Connection`
 
-    决定当前的事务完成后，是否关闭网络连接。如果该值是`keep-alive`，网络连接都是持久的，不会关闭，使得对同一服务器的请求可以继续在该连接上完成。
+    决定当前的事务完成后，是否关闭网络连接。如果该值是`keep-alive`，网络连接都是持久的，不会关闭，使得对同一服务器的请求可以继续在该连接上完成。HTTP/1.1 规定所有链接默认都是持久的，除非显式的设置为 `close`。
 
     示例：
 
@@ -161,9 +196,9 @@ OPTIONS /anypage.html HTTP/1.0
     Connection: close
     ```
 
-  - `Transfor-Encoding`
+  - `Transfer-Encoding`
 
-    指明了将<u>实体首部消息</u>传递给用户所采用的编码形式。例如：
+    指明了将内容主体传递给用户所采用的编码形式。例如：
 
     ```
     Transfer-Encoding: chunked
@@ -171,6 +206,23 @@ OPTIONS /anypage.html HTTP/1.0
     Transfer-Encoding: deflate
     Transfer-Encoding: gzip
     Transfer-Encoding: identity
+    ```
+    
+    `Transfer-Encoding` 通常用于持久连接过程中，无法获取内容主体的实际长度，可以采用 `Transfer-Encoding: chunked` 定义分块编码。
+    
+    ```http
+    HTTP/1.1 200 OK 
+    Content-Type: text/plain 
+    Transfer-Encoding: chunked
+    
+    7\r\n
+    Mozilla\r\n 
+    9\r\n
+    Developer\r\n
+    7\r\n
+    Network\r\n
+    0\r\n 
+    \r\n
     ```
 
 - 请求首部消息：客户端向服务器发送请求的报文时所使用的头部
@@ -181,7 +233,7 @@ OPTIONS /anypage.html HTTP/1.0
 
     示例：
 
-    ```
+    ```http
     Accept: text/html
     Accept: image/*
     Accept: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8
@@ -231,7 +283,7 @@ OPTIONS /anypage.html HTTP/1.0
 
   - `Accept-Ranges`
 
-    如果服务器支持 `Range`，首先需要告知客户端，服务器会在响应头中添加 `Accept-Ranges:bytes` 表示支持 `Range` 请求，之后客户端才能发起带 `Range` 的请求。不支持的话，使用 `Accept-Ranges` 表示。
+    如果服务器支持 `Range`，首先需要告知客户端，服务器会在响应头中添加 `Accept-Ranges: bytes` 表示支持 `Range` 请求，之后客户端才能发起带 `Range` 的请求。不支持的话，使用 `Accept-Ranges: none` 表示。
 
   - `Content-Type`
 
@@ -298,6 +350,11 @@ OPTIONS /anypage.html HTTP/1.0
     ```
     Expires: Wed, 21 Oct 2015 07:28:00 GMT
     ```
+    
+  - `Content-Encoding`
+  
+    对特定媒体类型的数据进行压缩。用来告知客户端应该怎样解码才能获取在 `Content-Type` 中标示的媒体类型内容。内容编码目的是优化传输内容大小，通俗的讲就是进行压缩。内容编码针对的只是传输正文，HTTP/1 头部始终是以 ASCII 文本传输，没有进行压缩，该问题在 HTTP/2 中得以解决。
+
 
 ## 08. `HTTP` 状态码
 
@@ -382,13 +439,13 @@ OPTIONS /anypage.html HTTP/1.0
 
 - 303 See Other
 
-  请求重定向，重定向页面的方法要总是使用 `GET`。
+  请求重定向，<u>重定向页面的方法要总是使用 `GET`</u>。
 
 - 304 Not Modified
 
   说明无需再次传输请求内容，也就是说可以使用缓存的内容。
 
-  当客户端缓存了目标资源但不确定该缓存资源是否是最新版本的时候, 就会发送一个条件请求，这样就可以辨别出一个请求是否是条件请求，在进行条件请求时,客户端会提供给服务器一个 `If-Modified-Since` 请求头,其值为服务器上次返回的 `Last-Modified` 响应头中的 `Date` 日期值,还会提供一个 `If-None-Match` 请求头,值为服务器上次返回的 `ETag` 响应头的值。
+  当客户端缓存了目标资源，但不确定该缓存资源是否是最新版本的时候, 就会发送一个条件请求，这样就可以辨别出一个请求是否是条件请求，在进行条件请求时,客户端会提供给服务器一个 `If-Modified-Since` 请求头,其值为服务器上次返回的 `Last-Modified` 响应头中的 `Date` 日期值,还会提供一个 `If-None-Match` 请求头,值为服务器上次返回的 `ETag` 响应头的值。
 
   服务器会读取这两个请求头中的值，判断出客户端缓存资源是否是最新的，如果是的话，服务器就会返回 304 响应头，但是没有响应体。客户端收到 304 响应后，就会从本地缓存中读取对应的资源。
 
