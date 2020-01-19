@@ -318,6 +318,16 @@ OPTIONS /anypage.html HTTP/1.0
     ```
     Server: Apache/2.4.1 (Unix)
     ```
+    
+  - `Expires`
+
+    包含日期/时间，在这个时间之后，响应过期。如果在 `Cache-Control` 的响应头设置了 `max-age` 或 `s-max-age`，那么 `Expires` 头会被忽略。
+
+    示例：
+    
+    ```
+    Expires: Wed, 21 Oct 2015 07:28:00 GMT
+    ```
 
 - 实体首部消息：含有和消息主体相关的附加信息，例如主体的长度或者 MIME 类型。
 
@@ -339,16 +349,6 @@ OPTIONS /anypage.html HTTP/1.0
   
     ```
     Last-Modified: Wed, 21 Oct 2015 07:28:00 GMT 
-    ```
-  
-  - `Expires`
-  
-    包含日期/时间，在这个时间之后，响应过期。如果在 `Cache-Control` 的响应头设置了 `max-age` 或 `s-max-age`，那么 `Expires` 头会被忽略。
-  
-    示例：
-  
-    ```
-    Expires: Wed, 21 Oct 2015 07:28:00 GMT
     ```
     
   - `Content-Encoding`
