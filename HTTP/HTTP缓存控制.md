@@ -64,7 +64,20 @@ Cache-Control：cache-directive
 
 协商缓存可以有两种 HTTP 请求头实现 ： `Last-Modified` 和 `ETag`
 
+### `Last-Modified` 和 `If-Modified-Since`
 
+浏览器在第一次访问资源时，服务器返回资源的同时，在响应头部中添加 `Last-Modified` 头部，值表示：这个资源在服务器上的最后修改时间，浏览器接收后缓存文件和头部。
+
+```http
+Last-Modified: Fri, 22 Jul 2016 01:47:00 GMT
+```
+
+浏览器下一次请求这个资源，浏览器检测到有 `Last-Modified` 这个头部，于是添加 `If-Modified-Since` 这个头部，值就是 `Last-Modified` 值；服务器再次收到这个请求，会根据 `If-Modified-Since` 中的值和服务器中该资源最后修改时间做对比，如果没有变化，则返回 304 和空的响应体，直接从缓存读取；如果服务器该资源修改时间超过了 `If-Modified-Since` 的时间，说明文件有更新，于是返回新的资源文件和 200。
+
+### `Last-Modified` 弊端
+
+- 如果本地打开缓存文件，即使没有对文件进行修改，但是还会造成 `Last-Modified` 被修改，服务器不能命中缓存，导致发送相同的资源
+- 因为 `Last-Modified` 只能以秒计时，如果在不可感知的时间内修改完文件，那么服务端会认为资源还是命中了，不会返回正确的（更新后的）资源。
 
 ## 参考
 
