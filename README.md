@@ -47,6 +47,10 @@
 
 1. [Do not understand the source code of Arrays.copyOf](https://stackoverflow.com/questions/29494800/do-not-understand-the-source-code-of-arrays-copyof)
 
+## 翻译
+
+- [Java8中 map 和 flatMap 方法的区别](翻译/Java8中map和flatMap方法的区别.md)
+
 ## 前端
 
 ### Vue.js实战
@@ -69,3 +73,4 @@
 ### JPA
 
 - [CascadeType 详解 _ Jeff Lee](转载/JPA/CascadeType 详解 _ Jeff Lee.md)
+
