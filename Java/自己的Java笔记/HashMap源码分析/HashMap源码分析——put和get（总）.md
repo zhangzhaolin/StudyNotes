@@ -4,7 +4,7 @@
 
 仿照美团文章，我也做了一个有关put函数的整理 ：
 
-![](http://zhangzhaolin.oss-cn-beijing.aliyuncs.com/18-7-27/13348411.jpg)
+![](https://raw.githubusercontent.com/zhangzhaolin/StudyNotes/master/%E7%BB%98%E5%9B%BE/HashMap%E7%9A%84put%E6%93%8D%E4%BD%9C.jpg)
 
 ## 一问一答
 
