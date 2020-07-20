@@ -34,11 +34,12 @@
 
 ### 自己的Java学习笔记
 
-- [HashMap的put和get函数](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94put%E5%92%8Cget%EF%BC%88%E6%80%BB%EF%BC%89.md)
+- [HashMap 部分源码解析](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94put%E5%92%8Cget%EF%BC%88%E6%80%BB%EF%BC%89.md)
 - [序列化和反序列化](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.md)
 - [Java泛型](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Java%E6%B3%9B%E5%9E%8B.md)
 - [`try-with-resources`语句](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/try-with-resources%20%E8%AF%AD%E5%8F%A5.md)
 - [快速失败 (`fail-fast` ) VS 安全失败 (`fail-safe` ) ](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/%E5%BF%AB%E9%80%9F%E5%A4%B1%E8%B4%A5%EF%BC%88fail-fast%EF%BC%89%E5%92%8C%E5%AE%89%E5%85%A8%E5%A4%B1%E8%B4%A5%EF%BC%88fail-safe%EF%BC%89.md)
+- [Stream 的 Reduce 及 Collect 方法详解.md](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Stream%20%E7%9A%84%20Reduce%20%E5%8F%8A%20Collect%20%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3.md)
 - 为什么说HashMap是不安全的(即将开坑...)
 - 什么是 APT（annotation processing tool）
 
