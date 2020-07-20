@@ -1,72 +1,8 @@
 [TOC]
 
-# 1. 简单实例
+# 1. 类装载器`ClassLoader`
 
-```java
-package reflection;
-public class Car {
-    private String brand;
-    private String color;
-    private int maxSpeed;
-    public Car(){}
-    public Car(String brand, String color, int maxSpeed) {
-        this.brand = brand;
-        this.color = color;
-        this.maxSpeed = maxSpeed;
-    }
-    // 省略set,get,toString,...方法
-}
-```
-
-```java
-public class ReflectTest {
-    public static void main(String[] args) throws Exception {
-        // 通过类装载器获取对象
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        Class clazz = loader.loadClass("reflection.Car");
-		// 通过类的默认构造对象并通过它实例化Car
-        Constructor constructor = clazz.getConstructor((Class[])null);
-        Car car = (Car)constructor.newInstance();
-        // 通过反射方法设置属性
-        Method setBrand = clazz.getMethod("setBrand", String.class);
-        setBrand.invoke(car,"红旗CA72");
-        clazz.getMethod("setColor", String.class).invoke(car,"红色");
-        clazz.getMethod("setMaxSpeed", int.class).invoke(car,300);
-        System.out.println(car);
-    }
-    // Car{brand='红旗CA72', color='红色', maxSpeed=300}
-}
-```
-
-有几个非常重要的反射类，分别是`ClassLoader`、`Class`、`Constructor`和`Method`。
-
-- **获取当前线程的`ClassLoader`**，然后通过指定的全限制类名`reflection.Car`装载`Car`类对应的反射实例。
-
-```java
-ClassLoader loader = Thread.currentThread().getContextClassLoader();
-Class clazz = loader.loadClass("reflection.Car");
-```
-
-- 通过`Car`的**反射类对象**获取`Car`的构造函数，通过构造函数对象的`newInstrance()`方法实例化`Car`对象 。
-
-```java
-Constructor constructor = clazz.getConstructor();
-Car car = (Car)constructor.newInstance();
-```
-
-- 通过`Car`的反射类对象的`getMethod(String methodName,Class<?>... parameterTypes)`方法获取属性的`Setter`方法对象。在获取对象方法之后，可以使用`invoke(Object obj,Object... args)`方法调用目标类的方法 。
-
-```java
-Method setBrand = clazz.getMethod("setBrand",String.class);
-setBrand.invoke(car,"红旗CA72");
-Method setColor = clazz.getMethod("setColor",String.class);
-setColor.invoke(car,"red");
-//...
-```
-
-# 2. 类装载器`ClassLoader`
-
-## 2.1 类装载器的工作机制
+## 1.1 类装载器的工作机制
 
 📚 类装载器就是 **寻找类的字节码文件并构造出类在JVM内部表示对象的组件**。在Java中，类装载器把一个类装入JVM中，需要经过以下步骤 ：
 
@@ -199,7 +135,7 @@ JVM装载类时使用”**全盘负责委托机制**“：
 - 全盘负责 ：当一个`ClassLoader`装载类时，除非显示的使用另一个`ClassLoader`，该类所依赖及引用的类也由这个`ClassLoader`载入。
 - 委托机制 ：先委托父装载器寻找目标类，只有在找不到的情况下才从自己的类路径中查找并装载目标类，这一点是从安全角度考虑的。
 
-## 2.2 类装载器的装载顺序
+## 1.2 类装载器的装载顺序
 
 1. `BootStrap ClassLoader`
 2. `Extention ClassLoader`
@@ -270,7 +206,7 @@ System.out.println(System.getProperty("sun.boot.class.path"));
 
 ```
 
-## 2.3 `ExtClassLoader`源码
+## 1.3 `ExtClassLoader`源码
 
 ```java
 static class ExtClassLoader extends URLClassLoader {
@@ -311,7 +247,7 @@ System.out.println(System.getProperty("java.ext.dirs"));
 // D:\Java\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext
 ```
 
-## 2.4 `AppClassLoader`源码
+## 1.4 `AppClassLoader`源码
 
 ```java
 static class AppClassLoader extends URLClassLoader {
@@ -337,7 +273,7 @@ static class AppClassLoader extends URLClassLoader {
 
 可以看到`AppClassLoader`加载的就是`java.class.path`下的路径。
 
-## 2.5 双亲委托
+## 1.5 双亲委托
 
 🔜 双亲委托的步骤如下所示 ：
 
@@ -349,7 +285,7 @@ static class AppClassLoader extends URLClassLoader {
 
 ![](https://image-static.segmentfault.com/382/677/3826778991-5a97ace869ede_articlex)
 
-## 2.6 `ClassLoader`重要方法
+## 1.6 `ClassLoader`重要方法
 
 `ClassLoader`中有以下几种常用方法 ：
 
@@ -404,7 +340,7 @@ protected Class<?> loadClass(String name, boolean resolve)
 |      `Class<?> loadClass(String name, boolean resolve)`      | name制定类装载器需要装载类的名称（必须要使用全限定类名），resolve参数告诉装载器是否需要解析该类（在初始化类之前，应该考虑类的解析工作，但并不是所有的类都需要解析） |
 | `Class<?> defineClass(String name, byte[] b, int off, int len)` | 将类文件的字节数组转换为JVM内部的`java.lang.Class`对象，字节数组可以从本地文件系统、远程网络获取 |
 
-## 2.7 自定义`ClassLoader`方法
+## 1.7 自定义`ClassLoader`方法
 
 自定义`ClassLoader`的步驟 ：
 
@@ -472,7 +408,7 @@ public class ClassLoaderText {
 }
 ```
 
-## 2.8 `Context ClassLoader`线程上下文类加载器
+## 1.8 `Context ClassLoader`线程上下文类加载器
 
 `contextClassLoader`只是一个成员变量，通过`setContextClassLoader`设置，通过`getContextClassLoader`获取 ：
 
@@ -501,7 +437,7 @@ public class Thread implements Runable{
 }
 ```
 
-# 3. 引用
+# 2. 引用
 
 - [深入理解JVM之ClassLoader](https://segmentfault.com/a/1190000013469223)
 

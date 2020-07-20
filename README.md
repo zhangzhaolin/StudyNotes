@@ -40,6 +40,7 @@
 - [`try-with-resources`语句](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/try-with-resources%20%E8%AF%AD%E5%8F%A5.md)
 - [快速失败 (`fail-fast` ) VS 安全失败 (`fail-safe` ) ](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/%E5%BF%AB%E9%80%9F%E5%A4%B1%E8%B4%A5%EF%BC%88fail-fast%EF%BC%89%E5%92%8C%E5%AE%89%E5%85%A8%E5%A4%B1%E8%B4%A5%EF%BC%88fail-safe%EF%BC%89.md)
 - [Stream 的 Reduce 及 Collect 方法详解.md](https://github.com/zhangzhaolin/StudyNotes/blob/master/Java/%E8%87%AA%E5%B7%B1%E7%9A%84Java%E7%AC%94%E8%AE%B0/Stream%20%E7%9A%84%20Reduce%20%E5%8F%8A%20Collect%20%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3.md)
+- [JVM 之 ClassLoader](Java/自己的Java笔记/JVM 之 ClassLoader.md)
 - 为什么说HashMap是不安全的(即将开坑...)
 - 什么是 APT（annotation processing tool）
 
